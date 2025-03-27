@@ -10,14 +10,14 @@ export const filesRouter = express.Router();
 
 filesRouter.get("/getnotes", getAllNotes);
 filesRouter.get("/getnote/:notesId", getNotes)
-filesRouter.post("/addnotes", upload.single('pdf'), addNotes);
-filesRouter.post("addpyp", upload.single('pdf'), addPYP);
+filesRouter.post("/addnotes",authMiddleware, upload.single('pdf'), addNotes);
+filesRouter.post("addpyp",authMiddleware, upload.single('pdf'), addPYP);
 filesRouter.get("getpyps", getPYPs);
 filesRouter.get("getpyp/:PYPId", getPYP);
-filesRouter.post("solution/upload:pypId", upload.single('pdf'), addPYPSolution);
+filesRouter.post("solution/upload:pypId", authMiddleware, upload.single('pdf'), addPYPSolution);
 filesRouter.get("/solutions/:pypId", getPYPsSolution);
 // filesRouter.post("addsolution", addPYPSolution);
-filesRouter.post("upvoteNote/:notesId", upvoteNote);
-filesRouter.post("downvoteNote/:notesId", downvoteNote);
-filesRouter.post("upvotesolution:pypId", upvotePYPSolution);
-filesRouter.post("downvotesolution:pypId", downvotePYPSolution);
+filesRouter.post("upvoteNote/:notesId", authMiddleware, upvoteNote);
+filesRouter.post("downvoteNote/:notesId", authMiddleware, downvoteNote);
+filesRouter.post("upvotesolution:pypId", authMiddleware, upvotePYPSolution);
+filesRouter.post("downvotesolution:pypId", authMiddleware, downvotePYPSolution);
