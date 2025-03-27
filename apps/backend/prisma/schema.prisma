@@ -9,14 +9,15 @@ generator client {
 }
 
 
-model User {
+model Users {
   id        String  @id @default(uuid())
   name      String
   email     String  @unique
-  password  String
+  password  String?
   notes     Note[]
   papers    PYP[]
   solutions Solution[]
+  profilePicture String
   createdAt DateTime @default(now())
 }
 
@@ -25,7 +26,7 @@ model Note {
   title        String
   subject      String
   year         String
-  uploadedBy   User   @relation(fields: [uploadedById], references: [id])
+  uploadedBy   Users   @relation(fields: [uploadedById], references: [id])
   uploadedById String
   fileUrl      String
   createdAt    DateTime @default(now())
@@ -36,7 +37,7 @@ model PYP {
   title       String
   subject     String
   year        String
-  uploadedBy  User   @relation(fields: [uploadedById], references: [id])
+  uploadedBy  Users   @relation(fields: [uploadedById], references: [id])
   uploadedById String
   fileUrl     String
   solutions   Solution[]
@@ -47,7 +48,7 @@ model PYP {
 model Solution {
   id          String  @id @default(uuid())
   title       String
-  uploadedBy  User   @relation(fields: [uploadedById], references: [id])
+  uploadedBy  Users   @relation(fields: [uploadedById], references: [id])
   uploadedById String
   pyp         PYP    @relation(fields: [pypId], references: [id])
   pypId       String
