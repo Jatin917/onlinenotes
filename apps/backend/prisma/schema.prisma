@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model User {
+  id        String  @id @default(uuid())
+  name      String
+  email     String  @unique
+  password  String
+  notes     Note[]
+  papers    PYP[]
+  solutions Solution[]
+  createdAt DateTime @default(now())
+}
+
+model Note {
+  id        String  @id @default(uuid())
+  title     String
+  subject   String
+  year      String
+  uploadedBy User   @relation(fields: [uploadedById], references: [id])
+  uploadedById String
+  fileUrl   String
+  upvotes   Int     @default(0)
+  createdAt DateTime @default(now())
+}
+
+model PYP {
+  id          String  @id @default(uuid())
+  subject     String
+  year        Int
+  uploadedBy  User   @relation(fields: [uploadedById], references: [id])
+  uploadedById String
+  fileUrl     String
+  solutions   Solution[]
+  // upvotes     Int     @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Solution {
+  id          String  @id @default(uuid())
+  uploadedBy  User   @relation(fields: [uploadedById], references: [id])
+  uploadedById String
+  pyp         PYP    @relation(fields: [pypId], references: [id])
+  pypId       String
+  fileUrl     String
+  upvotes     Int     @default(0)
+  createdAt   DateTime @default(now())
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
