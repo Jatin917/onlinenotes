@@ -36,7 +36,7 @@ export const getNotes = async (req, res) =>{
 
 export const addNotes = async (req,res)=>{
     try {
-        const {title, subject, year, uploadedById} = req.body;
+        const {title, subject, year, userId:uploadedById} = req.body;
         if(!title && !subject && !year && !uploadedById){
             return res.status(HTTP_STATUS.BAD_REQUEST).json({message:"All Fields Required"});
         }
@@ -72,16 +72,8 @@ export const addNotes = async (req,res)=>{
 export const upvoteNote = async (req, res) =>{
     try {
         const notesId = req.params.notesId;
-        const response = await prisma.note.update({
-            where:{
-                id:notesId
-            },
-            data:{
-                upvotes:{
-                    increment:1
-                }
-            }
-        });
+        const userId = req.body.userId;
+        const response = await prisma.upvote.create({userId, entityId:notesId, entityType:"Notes"});
         if(!response){
             return res.status(HTTP_STATUS.NOT_MODIFIED).json({message:"Not modified"});
         }

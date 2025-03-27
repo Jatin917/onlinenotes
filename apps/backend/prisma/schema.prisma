@@ -28,7 +28,6 @@ model Note {
   uploadedBy   User   @relation(fields: [uploadedById], references: [id])
   uploadedById String
   fileUrl      String
-  upvotes      Int     @default(0)
   createdAt    DateTime @default(now())
 }
 
@@ -52,8 +51,15 @@ model Solution {
   pyp         PYP    @relation(fields: [pypId], references: [id])
   pypId       String
   fileUrl     String
-  upvotes     Int     @default(0)
   createdAt   DateTime @default(now())
+}
+
+model Upvote {
+  id        String  @id @default(uuid())
+  userId    String
+  entityId  String  // ID of the content being upvoted
+  entityType String // Type of content ('note', 'solution', etc.)
+  @@unique([userId, entityId, entityType]) // Ensures one upvote per user per entity
 }
 
 datasource db {

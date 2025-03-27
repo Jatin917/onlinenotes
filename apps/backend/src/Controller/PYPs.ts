@@ -6,7 +6,7 @@ import { supabase } from "../services/supabaseConfig";
 
 export const addPYP = async (req, res) =>{
     try {
-        const {title, subject, year, uploadedById} = req.body;
+        const {title, subject, year, userId:uploadedById} = req.body;
         if(!title && !subject && !year && !uploadedById){
             return res.status(HTTP_STATUS.BAD_REQUEST).json({message:"All Fields Required"});
         }
