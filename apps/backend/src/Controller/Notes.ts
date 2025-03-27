@@ -67,3 +67,52 @@ export const addNotes = async (req,res)=>{
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({error});
     }
 }
+
+
+export const upvoteNote = async (req, res) =>{
+    try {
+        const notesId = req.params.notesId;
+        const response = await prisma.note.update({
+            where:{
+                id:notesId
+            },
+            data:{
+                upvotes:{
+                    increment:1
+                }
+            }
+        });
+        if(!response){
+            return res.status(HTTP_STATUS.NOT_MODIFIED).json({message:"Not modified"});
+        }
+        return res.status(HTTP_STATUS.OK).json({message:"Upvotted Successfully"});
+    } catch (error) {
+        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({error});
+    }
+}
+
+export const downvoteNote = async (req, res) =>{
+    try {
+        const notesId = req.params.notesId;
+        const response = await prisma.note.update({
+            where:{
+                id:notesId
+            },
+            data:{
+                upvotes:{
+                    decrement:1
+                }
+            }
+        });
+        if(!response){
+            return res.status(HTTP_STATUS.NOT_MODIFIED).json({message:"Not modified"});
+        }
+        return res.status(HTTP_STATUS.OK).json({message:"Downvotted Successfully"});
+    } catch (error) {
+        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({error});
+    }
+}
+
+
+
+
