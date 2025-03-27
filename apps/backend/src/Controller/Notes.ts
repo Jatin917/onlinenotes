@@ -73,37 +73,37 @@ export const upvoteNote = async (req, res) =>{
     try {
         const notesId = req.params.notesId;
         const userId = req.body.userId;
-        const response = await prisma.upvote.create({userId, entityId:notesId, entityType:"Notes"});
+        const response = await prisma.upvote.create({data:{userId, entityId:notesId, entityType:"Notes"}});
         if(!response){
-            return res.status(HTTP_STATUS.NOT_MODIFIED).json({message:"Not modified"});
+            return res.status(HTTP_STATUS.NOT_MODIFIED).json({message:"not Upvotted"});
         }
         return res.status(HTTP_STATUS.OK).json({message:"Upvotted Successfully"});
     } catch (error) {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({error});
     }
 }
-
 export const downvoteNote = async (req, res) =>{
     try {
         const notesId = req.params.notesId;
-        const response = await prisma.note.update({
-            where:{
-                id:notesId
-            },
-            data:{
-                upvotes:{
-                    decrement:1
-                }
+        const userId = req.body.userId;
+        const response = await prisma.upvote.delete({
+            where: {
+              userId_entityId_entityType: {   // Prisma auto-generates a composite key name
+                userId,
+                entityId: notesId,
+                entityType: "Notes"
+              }
             }
-        });
-        if(!response){
-            return res.status(HTTP_STATUS.NOT_MODIFIED).json({message:"Not modified"});
+          });
+                  if(!response){
+            return res.status(HTTP_STATUS.NOT_MODIFIED).json({message:"not Downvotted"});
         }
         return res.status(HTTP_STATUS.OK).json({message:"Downvotted Successfully"});
     } catch (error) {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({error});
     }
 }
+
 
 
 

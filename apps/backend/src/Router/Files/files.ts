@@ -3,6 +3,7 @@ import { addNotes, downvoteNote, getAllNotes, getNotes, upvoteNote } from '../..
 import { upload } from '../../Middleware/multer';
 import { authMiddleware } from '../../Middleware/authmiddleware';
 import { addPYP, getPYP, getPYPs } from '../../Controller/PYPs';
+import { addPYPSolution, downvotePYPSolution, getPYPsSolution, upvotePYPSolution } from '../../Controller/Solution';
 
 
 export const filesRouter = express.Router();
@@ -13,8 +14,8 @@ filesRouter.post("/addnotes", upload.single('pdf'), addNotes);
 filesRouter.post("addpyp", upload.single('pdf'), addPYP);
 filesRouter.get("getpyps", getPYPs);
 filesRouter.get("getpyp/:PYPId", getPYP);
-// filesRouter.post("solution/upload", addPYPSolution);
-// filesRouter.get("/solutions/:pypId", getPYPsSolution);
+filesRouter.post("solution/upload:pypId", upload.single('pdf'), addPYPSolution);
+filesRouter.get("/solutions/:pypId", getPYPsSolution);
 // filesRouter.post("addsolution", addPYPSolution);
 filesRouter.post("upvoteNote/:notesId", upvoteNote);
 filesRouter.post("downvoteNote/:notesId", downvoteNote);
