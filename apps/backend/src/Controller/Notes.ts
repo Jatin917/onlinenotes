@@ -1,5 +1,6 @@
 import { HTTP_STATUS } from "../lib/HTTPCODES";
 import { prisma } from "../server"
+import { supabase } from "../services/supabaseConfig";
 
 export const getAllNotes = async (req: any, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { message: string; data?: any; }): void; new(): any; }; }; }) =>{
     try {
@@ -35,8 +36,34 @@ export const getNotes = async (req, res) =>{
 
 export const addNotes = async (req,res)=>{
     try {
-        const {subject, title, year, uploadedById}
+        const {title, subject, year, uploadedById} = req.body;
+        if(!title && !subject && !year && !uploadedById){
+            return res.status(HTTP_STATUS.BAD_REQUEST).json({message:"All Fields Required"});
+        }
+        if (!req.file) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'No file uploaded' });
+        }
+        const fileName = `${Date.now()}-${title}`;
+        // console.log(req.file)
+        // Upload to Supabase Storage
+        const { data, error } = await supabase.storage
+        .from('onlinenotes')
+        .upload(fileName, req.file.buffer, { contentType: req.file.mimetype });
+
+        if (error) {
+            throw error;
+        }
+
+        // Get the public URL of the uploaded file
+        const uploadedFile = supabase.storage.from('onlinenotes').getPublicUrl(fileName);
+
+        console.log("Uploaded file URL:", uploadedFile.data.publicUrl);
+
+
+        const response = await prisma.note.create({data:{title, subject, year, uploadedById, fileUrl:uploadedFile.data.publicUrl}})
+        res.status(200).send({ message: 'File uploaded successfully!', url: response.fileUrl });
+
     } catch (error) {
-        
+        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({error});
     }
 }

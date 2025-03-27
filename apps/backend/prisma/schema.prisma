@@ -21,15 +21,15 @@ model User {
 }
 
 model Note {
-  id        String  @id @default(uuid())
-  title     String
-  subject   String
-  year      String
-  uploadedBy User   @relation(fields: [uploadedById], references: [id])
+  id           String  @id @default(uuid())
+  title        String
+  subject      String
+  year         String
+  uploadedBy   User   @relation(fields: [uploadedById], references: [id])
   uploadedById String
-  fileUrl   String
-  upvotes   Int     @default(0)
-  createdAt DateTime @default(now())
+  fileUrl      String
+  upvotes      Int     @default(0)
+  createdAt    DateTime @default(now())
 }
 
 model PYP {
