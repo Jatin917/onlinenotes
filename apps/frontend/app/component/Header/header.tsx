@@ -66,9 +66,6 @@ const Header = ({ setSelectedYear, setSelectedSubject }) => {
             <option key={subj} value={subj}>{subj}</option>
           ))}
         </select>
-        {/* <button onClick={toggleDarkMode} className="px-2 py-1 bg-blue-500 text-white rounded">
-          {darkMode ? "Light Mode" : "Dark Mode"}
-        </button> */}
         <ThemeToggle 
         initialTheme={darkMode?"dark":"light"}
         onChange={toggleDarkMode}
