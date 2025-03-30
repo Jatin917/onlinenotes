@@ -1,10 +1,15 @@
+"use client"
+
 import { Button } from "@repo/ui/button";
+import PDFCard from "./component/Card/card";
+import Header from "./component/Header/header";
+import Dashboard from "./component/Dashboard/dashboard";
 
 export default function Home() {
+
   return (
     <div>
-      <Button className="noting" appName="Online Notes">click me</Button>
-      Hello this is jatin
+      <Dashboard />      
     </div>
   );
 }
