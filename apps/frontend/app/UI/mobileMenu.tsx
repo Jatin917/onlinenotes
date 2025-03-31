@@ -33,6 +33,7 @@ const MobileMenu = ({
       {isOpen && (
         <div className="absolute top-16 left-0 right-0 bg-gray-900 shadow-lg z-50 py-4 px-6 flex flex-col space-y-4">
           <NavigationToggle
+            theme={theme}
             options={['NOTES', "PYPs"]}
             activeIndex={0}
             onChange={() => {}}
@@ -40,12 +41,14 @@ const MobileMenu = ({
           
           <div className="flex flex-col space-y-3">
             <FilterDropdown
+              theme={theme}
               placeholder="Select Year"
               options={years}
               value={selectedYear}
               onChange={onYearChange}
             />
             <FilterDropdown
+              theme={theme}
               placeholder="Select Subject"
               options={subjects}
               value={selectedSubject}

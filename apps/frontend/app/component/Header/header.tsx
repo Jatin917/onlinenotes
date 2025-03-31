@@ -13,12 +13,19 @@ const Logo = () => {
   
   
 //   // components/Header/SignInButton.jsx
-  const SignInButton = () => {
+  const SignInButton = ({theme}) => {
     return (
-      <button className="w-[80px] py-2 px-4 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors text-sm font-medium">
+      <button
+        className={`w-[80px] py-2 px-4 rounded-full transition-colors text-sm font-medium ${
+          theme === "dark"
+            ? "bg-gray-900 text-white hover:bg-gray-800"
+            : "bg-white text-gray-900 hover:bg-gray-300"
+        }`}
+      >
         Sign in
       </button>
     );
+    
   };
   
   
@@ -76,30 +83,38 @@ const Header = () => {
     // Apply theme changes to your app here
   };
   return (
-    <header className={`w-full py-4 px-4 md:px-6 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+    <header
+      className={`w-full py-4 px-4 md:px-6 ${
+        theme === "dark"
+          ? "bg-gray-900 text-white"
+          : "bg-gray-200 text-gray-800 border-b border-gray-300"
+      }`}
+    >
       <div className="flex items-center justify-between">
-        
         {/* Left side */}
         <div className="flex items-center space-x-4 lg:space-x-6">
           <Logo />
           <div className="hidden lg:block">
-            <NavigationToggle 
+            <NavigationToggle
+              theme={theme}
               options={["NOTES", "PYPs"]}
               activeIndex={0}
               onChange={handleNavChange}
             />
           </div>
         </div>
-        
+  
         {/* Middle - Filters (Desktop only) */}
         <div className="hidden lg:flex items-center space-x-4">
           <FilterDropdown
+            theme={theme}
             placeholder="Select Year"
             options={years}
             value={selectedYear}
             onChange={handleYearChange}
           />
           <FilterDropdown
+            theme={theme}
             placeholder="Select Subject"
             options={subjects}
             value={selectedSubject}
@@ -107,26 +122,25 @@ const Header = () => {
             disabled={!selectedYear}
           />
         </div>
-        
+  
         {/* Right side */}
         <div className="flex items-center space-x-3">
-          
           {/* Search Bar (Always visible, but smaller on mobile) */}
           <div className="w-36 md:w-full">
-            <SearchBar />
+            <SearchBar theme={theme} />
           </div>
-          
+  
           {/* Desktop Elements (Hidden on mobile) */}
           <div className="hidden lg:block">
             <ThemeToggle initialTheme={theme} onChange={handleThemeChange} />
           </div>
-          <div >
-            <SignInButton />
+          <div>
+            <SignInButton theme={theme} />
           </div>
   
           {/* Mobile Menu (Appears below 1024px) */}
           <div className="lg:hidden">
-            <MobileMenu 
+            <MobileMenu
               years={years}
               subjects={subjects}
               selectedYear={selectedYear}
@@ -141,6 +155,7 @@ const Header = () => {
       </div>
     </header>
   );
+  
   
 };
 

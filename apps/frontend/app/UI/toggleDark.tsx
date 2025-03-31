@@ -11,28 +11,28 @@ const ThemeToggle = ({ initialTheme = 'dark', onChange }) => {
     setTheme(newTheme);
     
     if (onChange) {
-      onChange();
+      onChange(newTheme);
     }
   };
 
   return (
     <div
-      className="relative bg-black rounded-full p-1 w-20 h-10 flex items-center cursor-pointer"
+      className="relative bg-gray-900 rounded-full p-1 w-20 h-10 flex items-center cursor-pointer"
       onClick={handleToggle}
     >
-      {/* Left Icon */}
+      {/* Left Icon (Moon - Dark Mode) */}
       <div
         className={`w-1/2 flex justify-center items-center z-10 transition-colors duration-300 ${
-          theme === 'dark' ? 'text-white' : 'text-gray-400'
+          theme === "dark" ? "text-gray-200" : "text-gray-500"
         }`}
       >
         <Moon size={20} />
       </div>
   
-      {/* Right Icon */}
+      {/* Right Icon (Sun - Light Mode) */}
       <div
         className={`w-1/2 flex justify-center items-center z-10 transition-colors duration-300 ${
-          theme === 'light' ? 'text-black' : 'text-gray-400'
+          theme === "light" ? "text-yellow-500" : "text-gray-500"
         }`}
       >
         <Sun size={20} />
@@ -41,7 +41,7 @@ const ThemeToggle = ({ initialTheme = 'dark', onChange }) => {
       {/* Slider */}
       <div
         className={`absolute top-1 h-8 w-8 bg-white rounded-full transition-transform duration-300 ease-in-out ${
-          theme === 'dark' ? 'translate-x-0' : 'translate-x-10'
+          theme === "dark" ? "translate-x-0" : "translate-x-10"
         }`}
       />
     </div>
