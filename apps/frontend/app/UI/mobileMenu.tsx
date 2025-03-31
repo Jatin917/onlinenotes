@@ -22,23 +22,29 @@ const MobileMenu = ({
   };
 
   return (
-    <div >
-      <button 
+    <div>
+      <button
         onClick={toggleMenu}
         className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors text-gray-300 hover:text-white"
       >
         {isOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
-      
+  
       {isOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-gray-900 shadow-lg z-50 py-4 px-6 flex flex-col space-y-4">
+        <div
+          className={`absolute top-16 left-0 right-0 ${
+            theme === "dark"
+              ? "bg-gray-900 text-white border-gray-700"
+              : "bg-gray-200 text-gray-800 border-gray-300"
+          } shadow-lg z-50 py-4 px-6 flex flex-col space-y-4 border`}
+        >
           <NavigationToggle
             theme={theme}
-            options={['NOTES', "PYPs"]}
+            options={["NOTES", "PYPs"]}
             activeIndex={0}
             onChange={() => {}}
           />
-          
+  
           <div className="flex flex-col space-y-3">
             <FilterDropdown
               theme={theme}
@@ -56,18 +62,22 @@ const MobileMenu = ({
               disabled={!selectedYear}
             />
           </div>
-          
-          <div className="flex items-center justify-between pt-2 border-t border-gray-700">
-            <span className="text-sm text-gray-400">Theme</span>
-            <ThemeToggle 
-              initialTheme={theme}
-              onChange={onThemeChange}
-            />
+  
+          <div className="flex items-center justify-between pt-2 border-t">
+            <span
+              className={`text-sm ${
+                theme === "dark" ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
+              Theme
+            </span>
+            <ThemeToggle initialTheme={theme} onChange={onThemeChange} />
           </div>
         </div>
       )}
     </div>
   );
+  
 };
 
 export default MobileMenu;

@@ -1,3 +1,5 @@
+"use client"
+import { SessionProvider } from "next-auth/react";
 import Header from "./component/Header/header";
 import "./globals.css";
 
@@ -9,10 +11,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+      <SessionProvider>
       <Header />
         <main className="container mx-auto p-4 md:p-6">
-          {children}
+            {children}
         </main>
+        </SessionProvider>
 
       </body>
     </html>

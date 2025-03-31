@@ -16,6 +16,7 @@ const Logo = () => {
   const SignInButton = ({theme}) => {
     return (
       <button
+        onClick={()=>signIn()}
         className={`w-[80px] py-2 px-4 rounded-full transition-colors text-sm font-medium ${
           theme === "dark"
             ? "bg-gray-900 text-white hover:bg-gray-800"
@@ -27,6 +28,35 @@ const Logo = () => {
     );
     
   };
+  const SignOutButton = ({ theme, data }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    if (!data) return null;
+  
+    return (
+      <div className="relative inline-block">
+        <img
+          src={data.user.image || "/default-avatar.png"}
+          alt="User Profile"
+          className="w-16 h-10 rounded-full cursor-pointer border-2 border-transparent hover:border-gray-400"
+          onMouseEnter={() => setIsOpen(true)}
+        />
+        {isOpen && (
+          <div
+            className="absolute right-0 mt-2 w-32 bg-white shadow-lg rounded-lg overflow-hidden"
+            onMouseLeave={() => setIsOpen(false)}
+          >
+            <button
+              onClick={() => signOut()}
+              className="block w-full px-4 py-2 text-sm text-gray-800 hover:bg-gray-200"
+            >
+              Sign Out
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   
   
  
@@ -36,8 +66,12 @@ import { FilterDropdown } from '../../UI/filterDropDown';
 import SearchBar from '../../UI/searchBar';
 import ThemeToggle from '../../UI/toggleDark';
 import MobileMenu from '../../UI/mobileMenu';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 const Header = () => {
+  const {data, status} = useSession();
+  console.log(data);
   const [activeNav, setActiveNav] = useState('Compositions');
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -135,7 +169,7 @@ const Header = () => {
             <ThemeToggle initialTheme={theme} onChange={handleThemeChange} />
           </div>
           <div>
-            <SignInButton theme={theme} />
+            {status!=="authenticated" ? <SignInButton theme={theme} /> : <SignOutButton theme={theme} data={data} />}
           </div>
   
           {/* Mobile Menu (Appears below 1024px) */}
