@@ -18,7 +18,9 @@ export const authMiddleware = (req, res, next) =>{
         if(!decodedata){
             return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: "Unauthorized: No token provided" });
         }
+        console.log("req.body ", req.body, decodedata);
         req.body.userId=decodedata?.id;
+        console.log(req.body);
         next();
     } catch (error) {
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: "Forbidden: Invalid token" });

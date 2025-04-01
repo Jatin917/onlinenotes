@@ -34,39 +34,68 @@ export const getNotes = async (req, res) =>{
     }
 }
 
-export const addNotes = async (req,res)=>{
+export const addNotes = async (req, res) => {
     try {
-        const {title, subject, year, userId:uploadedById} = req.body;
-        if(!title && !subject && !year && !uploadedById){
-            return res.status(HTTP_STATUS.BAD_REQUEST).json({message:"All Fields Required"});
+        const { title, subject, year, userId:uploadedById } = req.body;
+        console.log(req.body, uploadedById);
+        if (!title || !subject || !year || !uploadedById) {
+            return res.status(400).json({ message: "All Fields Required" });
         }
-        if (!req.file) {
-            return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'No file uploaded' });
-        }
-        const fileName = `${Date.now()}-${title}`;
-        // console.log(req.file)
-        // Upload to Supabase Storage
-        const { data, error } = await supabase.storage
-        .from('onlinenotes')
-        .upload(fileName, req.file.buffer, { contentType: req.file.mimetype });
 
-        if (error) {
-            throw error;
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded" });
         }
+
+        const fileName = `${title}-${year}`; // Unique identifier with title & year
+
+        // Check if the file already exists in Supabase
+        const existingFile = supabase.storage.from('onlinenotes').getPublicUrl(fileName);
+
+        if (existingFile.data.publicUrl) {
+            console.log("File already exists:", existingFile.data.publicUrl);
+            
+            // Check if the note entry already exists in the database
+            const existingNote = await prisma.note.findFirst({
+                where: { title, subject, year, uploadedById }
+            });
+
+            if (existingNote) {
+                return res.status(200).json({ message: "File already exists!", url: existingFile.data.publicUrl });
+            }
+
+            // If the file exists but there's no DB entry, create one
+            const response = await prisma.note.create({
+                data: { title, subject, year, uploadedById, fileUrl: existingFile.data.publicUrl }
+            });
+
+            return res.status(200).json({ message: "File already exists, added entry in database!", url: response.fileUrl });
+        }
+
+        // If file does not exist, upload it
+        const { data, error } = await supabase.storage
+            .from('onlinenotes')
+            .upload(fileName, req.file.buffer, { contentType: req.file.mimetype });
+
+        if (error) throw error;
 
         // Get the public URL of the uploaded file
         const uploadedFile = supabase.storage.from('onlinenotes').getPublicUrl(fileName);
 
         console.log("Uploaded file URL:", uploadedFile.data.publicUrl);
 
+        // Save file metadata in the database
+        const response = await prisma.note.create({
+            data: { title, subject, year, uploadedById, fileUrl: uploadedFile.data.publicUrl }
+        });
 
-        const response = await prisma.note.create({data:{title, subject, year, uploadedById, fileUrl:uploadedFile.data.publicUrl}})
-        res.status(200).send({ message: 'File uploaded successfully!', url: response.fileUrl });
+        res.status(200).json({ message: "File uploaded successfully!", url: response.fileUrl });
 
     } catch (error) {
-        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({error});
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
     }
-}
+};
+
 
 
 export const upvoteNote = async (req, res) =>{

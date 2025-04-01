@@ -10,11 +10,11 @@ export const filesRouter = express.Router();
 
 filesRouter.get("/getnotes", getAllNotes);
 filesRouter.get("/getnote/:notesId", getNotes)
-filesRouter.post("/addnotes",authMiddleware, upload.single('pdf'), addNotes);
-filesRouter.post("addpyp",authMiddleware, upload.single('pdf'), addPYP);
+filesRouter.post("/addnotes", upload.single('pdf'), authMiddleware, addNotes);
+filesRouter.post("addpyp", upload.single('pdf'), authMiddleware, addPYP);
 filesRouter.get("getpyps", getPYPs);
 filesRouter.get("getpyp/:PYPId", getPYP);
-filesRouter.post("solution/upload:pypId", authMiddleware, upload.single('pdf'), addPYPSolution);
+filesRouter.post("solution/upload:pypId", upload.single('pdf'), authMiddleware, addPYPSolution);
 filesRouter.get("/solutions/:pypId", getPYPsSolution);
 // filesRouter.post("addsolution", addPYPSolution);
 filesRouter.post("upvoteNote/:notesId", authMiddleware, upvoteNote);
