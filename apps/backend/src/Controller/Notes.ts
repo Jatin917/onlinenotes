@@ -49,37 +49,22 @@ export const addNotes = async (req, res) => {
         const fileName = `${title}-${year}`; // Unique identifier with title & year
 
         // Check if the file already exists in Supabase
-        const existingFile = supabase.storage.from('onlinenotes').getPublicUrl(fileName);
+        const existingNote = await prisma.note.findFirst({
+            where: { title, subject, year, uploadedById }
+        });
 
-        if (existingFile.data.publicUrl) {
-            console.log("File already exists:", existingFile.data.publicUrl);
-            
-            // Check if the note entry already exists in the database
-            const existingNote = await prisma.note.findFirst({
-                where: { title, subject, year, uploadedById }
-            });
-
-            if (existingNote) {
-                return res.status(200).json({ message: "File already exists!", url: existingFile.data.publicUrl });
-            }
-
-            // If the file exists but there's no DB entry, create one
-            const response = await prisma.note.create({
-                data: { title, subject, year, uploadedById, fileUrl: existingFile.data.publicUrl }
-            });
-
-            return res.status(200).json({ message: "File already exists, added entry in database!", url: response.fileUrl });
+        if (existingNote) {
+            return res.status(200).json({ message: "File with this name already exists!" });
         }
-
         // If file does not exist, upload it
         const { data, error } = await supabase.storage
-            .from('onlinenotes')
+            .from('notesonline')
             .upload(fileName, req.file.buffer, { contentType: req.file.mimetype });
 
         if (error) throw error;
 
         // Get the public URL of the uploaded file
-        const uploadedFile = supabase.storage.from('onlinenotes').getPublicUrl(fileName);
+        const uploadedFile = supabase.storage.from('notesonline').getPublicUrl(fileName);
 
         console.log("Uploaded file URL:", uploadedFile.data.publicUrl);
 
