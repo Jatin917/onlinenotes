@@ -1,8 +1,8 @@
 import express from 'express'
-import verifyToken from '../../Middleware/authmiddleware';
 import { googleAuth } from '../../Controller/auth';
+import { verifyToken } from '../../Middleware/authmiddleware';
 
 
 export const authRouter = express.Router();
 
-authRouter.post('googleAuth', verifyToken, googleAuth);
+authRouter.post('/google', verifyToken, googleAuth);

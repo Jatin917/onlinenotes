@@ -70,8 +70,9 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 
 const Header = () => {
+  const session = useSession();
   const {data, status} = useSession();
-  console.log(data);
+  console.log("session is ", session);
   const [activeNav, setActiveNav] = useState('Compositions');
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
