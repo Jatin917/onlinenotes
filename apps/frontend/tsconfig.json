@@ -5,15 +5,17 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     "next-env.d.ts",
     "next.config.js",
-    ".next/types/**/*.ts"
-, "app/component/VerticalToggle"  ],
+    ".next/types/**/*.ts",
+    "app/component/VerticalToggle"
+  ],
   "exclude": [
     "node_modules"
   ]

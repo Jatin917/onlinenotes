@@ -1,12 +1,11 @@
 
 // Dashboard.jsx
 import { useState } from "react";
-import Header from "../Header/header";
+import Header from "../component/Header/header";
 import VerticalToggle from "../VerticalToggle/verticalToggle";
 
 const Dashboard = () => {
-  const categories = ["All", "Notes", "Books", "Videos"];
-  const [activeCategory, setActiveCategory] = useState("All");
+  
 
   return (
     <div className="py-8">

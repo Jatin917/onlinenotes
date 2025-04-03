@@ -35,8 +35,8 @@ const PDFCard: React.FC<PDFCardProps> = ({
       hover:shadow-xl
       ${
         isDarkMode
-          ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white border-2 border-gray-700"
-          : "bg-gradient-to-br from-gray-100 to-gray-50 text-black border-2 border-gray-200"
+          ? "bg-gray-900 text-white border border-gray-700"
+          : "bg-gray-200 text-gray-800 border border-gray-300"
       }
     `}
     >
@@ -53,8 +53,8 @@ const PDFCard: React.FC<PDFCardProps> = ({
               shadow-md
               ${
                 isDarkMode
-                  ? "border-2 border-gray-700"
-                  : "border-2 border-gray-300"
+                  ? "border border-gray-700"
+                  : "border border-gray-400"
               }
             `}
           />
@@ -63,7 +63,6 @@ const PDFCard: React.FC<PDFCardProps> = ({
             absolute 
             bottom-0 
             right-0 
-            bg-blue-500 
             text-white 
             px-2 
             py-1 
@@ -82,7 +81,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
             font-semibold 
             text-xl 
             mb-1
-            ${isDarkMode ? "text-gray-100" : "text-gray-900"}
+            ${isDarkMode ? "text-gray-100" : "text-gray-800"}
           `}
           >
             {title}
@@ -91,7 +90,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
             className={`
             text-sm 
             font-medium
-            ${isDarkMode ? "text-gray-400" : "text-gray-700"}
+            ${isDarkMode ? "text-gray-400" : "text-gray-600"}
           `}
           >
             Owner: {owner}
@@ -113,8 +112,8 @@ const PDFCard: React.FC<PDFCardProps> = ({
             group
             ${
               isDarkMode
-                ? "bg-blue-800 text-white hover:bg-blue-700"
-                : "bg-blue-600 text-white hover:bg-blue-700"
+                ? "bg-blue-700 text-white hover:bg-blue-600"
+                : "bg-blue-600 text-white hover:bg-blue-500"
             }
           `}
         >
@@ -135,8 +134,8 @@ const PDFCard: React.FC<PDFCardProps> = ({
             group
             ${
               isDarkMode
-                ? "bg-green-800 text-white hover:bg-green-700"
-                : "bg-green-600 text-white hover:bg-green-700"
+                ? "bg-green-700 text-white hover:bg-green-600"
+                : "bg-green-600 text-white hover:bg-green-500"
             }
           `}
         >
