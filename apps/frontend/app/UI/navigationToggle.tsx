@@ -1,11 +1,16 @@
 "use client";
-import { useState } from 'react';
+import { useRouter } from "next/navigation"; // Correct import
+import { useState } from "react";
 
-export const  NavigationToggle = ({ options = ['Solutions', 'PYPs'], activeIndex = 0, onChange, theme }) => {
+export const NavigationToggle = ({ options = ["Notes", "PYPs", "Profile"], activeIndex = 0, onChange, theme }) => {
   const [active, setActive] = useState(activeIndex);
+  const router = useRouter();
 
   const handleOptionClick = (index) => {
     setActive(index);
+    const route = options[index]?.toLowerCase();
+    router.push(`/${route}`); // Navigate to the selected route
+
     if (onChange) {
       onChange(options[index], index);
     }
@@ -13,7 +18,7 @@ export const  NavigationToggle = ({ options = ['Solutions', 'PYPs'], activeIndex
 
   return (
     <div
-      className={`rounded-full px-1 py-1 flex items-center w-full  ${
+      className={`rounded-full px-1 py-1 flex items-center w-full ${
         theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"
       }`}
     >
@@ -36,6 +41,4 @@ export const  NavigationToggle = ({ options = ['Solutions', 'PYPs'], activeIndex
       ))}
     </div>
   );
-  
-  
 };

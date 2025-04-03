@@ -134,7 +134,7 @@ const Header = () => {
           <div className="hidden lg:block">
             <NavigationToggle
               theme={theme}
-              options={["NOTES", "PYPs"]}
+              options={["NOTES", "PYPs", 'Profile']}
               activeIndex={0}
               onChange={handleNavChange}
             />

@@ -14,6 +14,7 @@ export default function RootLayout({
       <body>
         <SessionProvider>
           <RecoilRoot>
+            <Header />
             <main className="container mx-auto">{children}</main>
           </RecoilRoot>
         </SessionProvider>
