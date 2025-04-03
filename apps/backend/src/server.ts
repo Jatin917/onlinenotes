@@ -3,7 +3,6 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import { router } from './Router/router';
 import { PrismaClient } from '@prisma/client';
-import { upload } from './Middleware/multer';
 import bodyParser from 'body-parser'
 
 dotenv.config()

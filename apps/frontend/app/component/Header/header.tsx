@@ -68,6 +68,8 @@ import ThemeToggle from '../../UI/toggleDark';
 import MobileMenu from '../../UI/mobileMenu';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useRecoilState } from 'recoil';
+import { themeAtom } from '../../state/themeAtom';
 
 const Header = () => {
   const session = useSession();
@@ -76,7 +78,7 @@ const Header = () => {
   const [activeNav, setActiveNav] = useState('Compositions');
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useRecoilState(themeAtom);
   const [isMobile, setIsMobile] = useState(false);
   
   const years = ['2022', '2023', '2024', '2025'];

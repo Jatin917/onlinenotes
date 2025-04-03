@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { getNotes } from "../../lib/actions/Notes";
 import PDFCard from "../../component/Card/card";
+import Header from "../../component/Header/header";
 
 const Page = () => {
   const [notes, setNotes] = useState<Array<{ title: string }>>([]);
@@ -24,19 +25,22 @@ const Page = () => {
   console.log("notes is ", notes);
 
   return (
-    <div>
-      {notes.map((note, i) => (
-        <PDFCard
-          key={i}
-          title={note.title}
-          owner="Nan"
-          imageUrl="None"
-          isDarkMode={false}
-          onDownload={() => {}} // ✅ Fix: Replaced `() => void`
-          onUpvote={() => {}} // ✅ Fix: Replaced `() => void`
-        />
-      ))}
-    </div>
+    <>
+      <Header />
+      <div>
+        {notes.map((note, i) => (
+          <PDFCard
+            key={i}
+            title={note.title}
+            owner="Nan"
+            imageUrl="None"
+            isDarkMode={false}
+            onDownload={() => {}} // ✅ Fix: Replaced `() => void`
+            onUpvote={() => {}} // ✅ Fix: Replaced `() => void`
+          />
+        ))}
+      </div>
+    </>
   );
 };
 
