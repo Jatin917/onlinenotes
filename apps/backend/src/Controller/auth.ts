@@ -27,9 +27,10 @@ export const googleAuth = async (req, res) => {
         }
         console.log("Successfully logged in");
         const token = jwt.sign({
-            email: user.email, id: user.id
+            id: user.id
         }, process.env.JWT_SECRET || '', { expiresIn: "1h" });
         console.log("Successfully logged in");
+        console.log(token);
         res.status(HTTP_STATUS.OK).json({ result: user, token });
     } catch (error) {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({

@@ -4,12 +4,14 @@ import cors from 'cors'
 import { router } from './Router/router';
 import { PrismaClient } from '@prisma/client';
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 
 dotenv.config()
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 const PORT = process.env.PORT
 export const JWT_SECRET = process.env.JWT_SECRET  || '';

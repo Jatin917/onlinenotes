@@ -1,26 +1,31 @@
 import admin from '../services/firebaseConfig'
 import jwt from 'jsonwebtoken'
-import { JWT_SECRET } from '../server.js';
+import { JWT_SECRET, prisma } from '../server.js';
 import { HTTP_STATUS } from '../lib/HTTPCODES.js';
 import { OAuth2Client } from "google-auth-library";
+const { decode } = require('next-auth/jwt');
 
 
-export const authMiddleware = (req, res, next) =>{
+export const authMiddleware = async (req, res, next) =>{
     try {
         if(!req.headers || !req.headers.authorization){
           return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: "Unauthorized: No token provided" });
         }
         const token =req.headers.authorization.split(" ")[1];
+        console.log("token is", token, JWT_SECRET)
         if (!token) {
             return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: "Unauthorized: No token provided" });
           }
-        let decodedata=jwt.verify(token,JWT_SECRET);
-        if(!decodedata){
-            return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: "Unauthorized: No token provided" });
-        }
-        console.log("req.body ", req.body, decodedata);
-        req.body.userId=decodedata?.id;
-        console.log(req.body);
+        const decoded = await decode({
+          token,
+          secret: process.env.JWT_SECRET
+        });
+        const email = decoded?.email;
+        const user = await prisma.users.findFirst({where:{
+          email
+        }});
+        req.body.userId=user?.id;
+        // console.log(req.body);
         next();
     } catch (error) {
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: "Forbidden: Invalid token" });
