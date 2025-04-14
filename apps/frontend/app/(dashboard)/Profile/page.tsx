@@ -8,9 +8,11 @@ import ProfileHeader from '../../component/ProfileHeader/ProfileHeader';
 import { useRecoilState } from 'recoil';
 import { themeAtom } from '../../state/themeAtom';
 import { DocumentSection } from '../../component/DocumentSection/DocumentSection';
+import { useSession } from 'next-auth/react';
 
 export default function ProfilePage() {
-  const [theme, setTheme] = useRecoilState(themeAtom)  
+  const [theme, setTheme] = useRecoilState(themeAtom);
+  const session = useSession();
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
@@ -22,14 +24,6 @@ export default function ProfilePage() {
       setTheme(prefersDark ? 'dark' : 'light');
     }
   }, []);
-
-  const [user, setUser] = useState({
-    name: "Jane Smith",
-    email: "jane.smith@university.edu",
-    avatar: "/api/placeholder/100/100",
-    bio: "Graduate student specializing in Machine Learning and Data Science. I create comprehensive study notes and collect past exam papers.",
-    department: "Computer Science"
-  });
 
   const [files, setFiles] = useState([
     { id: 1, name: "Advanced Data Structures Notes.pdf", type: "notes", date: "2025-03-15", size: "2.4 MB" },
@@ -50,7 +44,7 @@ export default function ProfilePage() {
       <div className="max-w-5xl mx-auto py-8 px-4">
         
         {/* Profile Header */}
-        <ProfileHeader user={user} />
+        <ProfileHeader user={session?.data?.user} />
         
         <div className="grid md:grid-cols-3 gap-8">
           {/* Left Column - Upload Section */}

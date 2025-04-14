@@ -43,6 +43,7 @@ model PYP {
   solutions   Solution[]
   // upvotes     Int     @default(0)
   createdAt   DateTime @default(now())
+// define relation between mid, mini, end  
 }
 
 model Solution {

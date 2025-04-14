@@ -8,7 +8,10 @@ import cookieParser from 'cookie-parser'
 
 dotenv.config()
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // your Next.js frontend origin
+    credentials: true,               // this allows cookies to be sent
+  }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());

@@ -3,16 +3,13 @@ import jwt from 'jsonwebtoken'
 import { JWT_SECRET, prisma } from '../server.js';
 import { HTTP_STATUS } from '../lib/HTTPCODES.js';
 import { OAuth2Client } from "google-auth-library";
-const { decode } = require('next-auth/jwt');
+import { decode } from 'next-auth/jwt';
 
 
 export const authMiddleware = async (req, res, next) =>{
     try {
-        if(!req.headers || !req.headers.authorization){
-          return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: "Unauthorized: No token provided" });
-        }
-        const token =req.headers.authorization.split(" ")[1];
-        console.log("token is", token, JWT_SECRET)
+      // const token = req.cookies['next-auth.session-token'];  
+      const token = req.headers.authorization.split(" ")[1];
         if (!token) {
             return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: "Unauthorized: No token provided" });
           }
@@ -38,6 +35,7 @@ const client = new OAuth2Client();
 
 // This is theMiddleware to verify Firebase token
 export const verifyToken = async (req, res, next) => {
+  console.log('Cookies:', req.cookies);  
   console.log("inside the verify token ", req.headers);
   const token = req.headers.authorization?.split(" ")[1];
   console.log(token);

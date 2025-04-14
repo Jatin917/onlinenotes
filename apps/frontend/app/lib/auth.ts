@@ -1,5 +1,4 @@
 import axios from "axios";
-import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 export const AUTH_OPTIONS = {
@@ -9,12 +8,21 @@ export const AUTH_OPTIONS = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET, // Required for JWT token encryption
+  secret: process.env.NEXTAUTH_SECRET, // for signing
+  session: {
+    strategy: 'jwt',
+  },
+  jwt: {
+    encryption: false,
+    secret: process.env.NEXTAUTH_SECRET,
+  },
   callbacks: {
     async jwt({ token, account }) {
-      if (account) {
-        token.idToken = account.id_token; // Store the Google ID Token
-      }
+      console.log("jwt callback ", account)
+      // abhi ke liye mujhe google id ka use nhi lg rha hain backend main ... we will use it in future
+      // if (account) {
+      //   token.idToken = account.id_token; // Store the Google ID Token
+      // }
       return token;
     },
     async session({ session, token }) {
@@ -28,6 +36,7 @@ export const AUTH_OPTIONS = {
         // Send user data to the backend to verify the token
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/google`,
+          // {  withCredentials: true, },
           {},  // Empty object for body (if no body is needed)
           {
             headers: { 

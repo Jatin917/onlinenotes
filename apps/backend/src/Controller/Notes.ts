@@ -37,7 +37,7 @@ export const getNotes = async (req, res) =>{
 export const addNotes = async (req, res) => {
     try {
         const { title, subject, year, userId:uploadedById } = req.body;
-        console.log(req.body, uploadedById);
+        console.log("req.body", req.body, uploadedById);
         if (!title || !subject || !year || !uploadedById) {
             return res.status(400).json({ message: "All Fields Required" });
         }
