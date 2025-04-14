@@ -42,7 +42,7 @@ export const addNotes = async (req, res) => {
             return res.status(400).json({ message: "All Fields Required" });
         }
 
-        if (!req.file) {
+        if (!req.body.file) {
             return res.status(400).json({ message: "No file uploaded" });
         }
 
@@ -59,7 +59,7 @@ export const addNotes = async (req, res) => {
         // If file does not exist, upload it
         const { data, error } = await supabase.storage
             .from('notesonline')
-            .upload(fileName, req.file.buffer, { contentType: req.file.mimetype });
+            .upload(fileName, req.body.file.buffer, { contentType: req.body.file.mimetype });
 
         if (error) throw error;
 

@@ -26,11 +26,17 @@ const UploadCard = ({ setFiles, files }) => {
 
   const handleFileUpload = async(e) => {
     e.preventDefault();
+    console.log("handle file input")
+    console.log("file input ref ", fileInputRef.current.files)
     setIsUploading(true);
-
     const file = fileInputRef.current.files[0];
-    const response = await addNotes(file, title, year, subject);
-
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("title", title);
+    formData.append("year", year);
+    formData.append("subject", subject);    
+    const response = await addNotes(formData);
+    setIsUploading(false)
     console.log(response);
   };
 

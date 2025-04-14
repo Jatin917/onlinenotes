@@ -18,17 +18,17 @@ export const getNotes = async() =>{
     }
 }
 
-export const addNotes = async (file, title, year, subject) =>{
+export const addNotes = async (formData) =>{
     try {
         const cookieStore = cookies()
         const sessionToken = cookieStore.get('next-auth.session-token')
-      
+        
         if (!sessionToken) {
           throw new Error('Session token not found')
         }
         const response = await axios.post(
             'http://localhost:8080/api/files/addnotes',
-            { withCredential: true }, // or your payload
+            formData, // or your payload
             {
               headers: {
                 'Content-Type': 'application/json',

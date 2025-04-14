@@ -8,8 +8,8 @@ import { decode } from 'next-auth/jwt';
 
 export const authMiddleware = async (req, res, next) =>{
     try {
-      // const token = req.cookies['next-auth.session-token'];  
-      const token = req.headers.authorization.split(" ")[1];
+      const token = req.cookies['next-auth.session-token'];  
+      // const token = req.headers.authorization.split(" ")[1];
         if (!token) {
             return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: "Unauthorized: No token provided" });
           }
@@ -18,9 +18,11 @@ export const authMiddleware = async (req, res, next) =>{
           secret: process.env.JWT_SECRET
         });
         const email = decoded?.email;
+        console.log("email of user is ", email)
         const user = await prisma.users.findFirst({where:{
           email
         }});
+        console.log("req.body authMiddleware", req.body)
         req.body.userId=user?.id;
         // console.log(req.body);
         next();
