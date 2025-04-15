@@ -10,7 +10,7 @@ export const addPYP = async (req, res) =>{
         if(!title && !subject && !year && !uploadedById){
             return res.status(HTTP_STATUS.BAD_REQUEST).json({message:"All Fields Required"});
         }
-        if (!req.file) {
+        if (!req.body.file) {
             return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'No file uploaded' });
         }
         const fileName = `${Date.now()}-${title}`;
@@ -18,7 +18,7 @@ export const addPYP = async (req, res) =>{
         // Upload to Supabase Storage
         const { data, error } = await supabase.storage
         .from('onlinenotes')
-        .upload(fileName, req.file.buffer, { contentType: req.file.mimetype });
+        .upload(fileName, req.body.file.buffer, { contentType: req.body.file.mimetype });
 
         if (error) {
             throw error;
