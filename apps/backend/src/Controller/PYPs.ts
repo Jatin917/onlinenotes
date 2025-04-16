@@ -39,7 +39,8 @@ export const addPYP = async (req, res) =>{
 
 export const getPYPs = async (req, res) =>{
     try {
-        const response = await prisma.pYP.findMany();
+        const page = req.query.page || 0;
+        const response = await prisma.pYP.findMany({skip:page*10, take:10});
         if(!response) return res.status(HTTP_STATUS.NOT_FOUND).json({message:"Not found"});
         return res.status(HTTP_STATUS.OK).json({message:"Found"});
     } catch (error) {

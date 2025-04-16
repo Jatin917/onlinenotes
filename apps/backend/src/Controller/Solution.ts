@@ -53,7 +53,8 @@ export const addPYPSolution = async (req, res) => {
 export const getPYPsSolution = async (req, res) =>{
     try {
         const pypId = req.params.pypId;
-        const data = await prisma.solution.findMany({where:{pypId}});
+        const page = req.query.page || 0;
+        const data = await prisma.solution.findMany({skip:page*10, take:10, where:{pypId}});
         if(!data) return res.status(HTTP_STATUS.NOT_FOUND).json({message:"No Solution Found"});
         return res.status(HTTP_STATUS.OK).json({message:"Founded"});
     } catch (error) {

@@ -4,7 +4,9 @@ import { supabase } from "../services/supabaseConfig";
 
 export const getAllNotes = async (req: any, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { message: string; data?: any; }): void; new(): any; }; }; }) =>{
     try {
-        const notes = await prisma.note.findMany();
+        const page = req.query.page || 0;
+        // skip-> itne numbers of records ko skip krna hain and take-> return this much of records
+        const notes = await prisma.note.findMany({skip:page*10, take:10});
         if(!notes){
             return res.status(HTTP_STATUS.NO_CONTENT).json({message:"No Notes Available"});
         }
