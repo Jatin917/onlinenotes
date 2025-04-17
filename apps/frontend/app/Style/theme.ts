@@ -1,7 +1,7 @@
 "use client"
 
 import { useRecoilValue } from "recoil";
-import { themeAtom } from "../state/themeAtom";
+import { themeAtom } from "../store/themeAtom";
 
 // Hook to use theme-based classes
 export function useThemeClasses() {

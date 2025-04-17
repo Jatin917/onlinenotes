@@ -1,7 +1,7 @@
 import React from "react";
 import { useThemeClasses } from "../../Style/theme";
 import { useRecoilValue } from "recoil";
-import { themeAtom } from "../../state/themeAtom";
+import { themeAtom } from "../../store/themeAtom";
 
 const StatsCard = ({files}) => {
       const {

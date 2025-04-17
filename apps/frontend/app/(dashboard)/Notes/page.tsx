@@ -1,41 +1,17 @@
-"use client";
 
-import React, { useEffect, useState } from "react";
+
+import React from "react";
 import { getNotes } from "../../lib/actions/Notes";
-import PDFCard from "../../component/Card/card";
+import NotesCards from "../../component/NotesCards/notesCards";
 
-const Page = () => {
-  const [notes, setNotes] = useState<Array<{ title: string }>>([]);
+const Page = async () => {
 
-  async function fetchNotes() {
-    try {
-      const response = await getNotes();
-      console.log("response ", response);
-      setNotes(response); // ✅ Fix: Updating state
-    } catch (error) {
-      console.error("Error fetching notes:", error);
-    }
-  }
-
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
+  const notes = await getNotes();
   console.log("notes is ", notes);
 
   return (
     <div>
-      {notes.map((note, i) => (
-        <PDFCard
-          key={i}
-          title={note.title}
-          owner="Nan"
-          imageUrl="None"
-          isDarkMode={false}
-          onDownload={() => {}} // ✅ Fix: Replaced `() => void`
-          onUpvote={() => {}} // ✅ Fix: Replaced `() => void`
-        />
-      ))}
+      <NotesCards initialNotes={notes} />
     </div>
   );
 };

@@ -6,7 +6,7 @@ import UploadCard from '../../component/UploadCard/UploadCard';
 import StatsCard from '../../component/StatsCard/StatsCard';
 import ProfileHeader from '../../component/ProfileHeader/ProfileHeader';
 import { useRecoilState } from 'recoil';
-import { themeAtom } from '../../state/themeAtom';
+import { themeAtom } from '../../store/themeAtom';
 import { DocumentSection } from '../../component/DocumentSection/DocumentSection';
 import { useSession } from 'next-auth/react';
 

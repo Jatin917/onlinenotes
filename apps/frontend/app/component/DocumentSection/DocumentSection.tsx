@@ -1,7 +1,7 @@
 import React from "react";
 import { useThemeClasses } from "../../Style/theme";
 import { useRecoilValue } from "recoil";
-import { themeAtom } from "../../state/themeAtom";
+import { themeAtom } from "../../store/themeAtom";
 
 export const DocumentSection = ({setActiveTab, activeTab, filteredFiles}) => {
     const theme = useRecoilValue(themeAtom);

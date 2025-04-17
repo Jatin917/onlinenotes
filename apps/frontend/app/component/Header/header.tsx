@@ -69,7 +69,7 @@ import MobileMenu from '../../UI/mobileMenu';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRecoilState } from 'recoil';
-import { themeAtom } from '../../state/themeAtom';
+import { themeAtom } from '../../store/themeAtom';
 
 const Header = () => {
   const session = useSession();
