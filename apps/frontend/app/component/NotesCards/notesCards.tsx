@@ -5,9 +5,17 @@ import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { pageAtom } from '../../store/pageAtom';
 
-const NotesCards = ({ initialNotes }) => {
+interface NotesType {
+    title:string,
+    imageUrl:string,
+    owner:string,
+    year:string,
+    fileUrl:string
+}
+
+const NotesCards = ({initialNotes}: {initialNotes:NotesType[]} ) => {
   const page = useRecoilValue(pageAtom);
-  const [notes, setNotes] = useState(initialNotes);
+  const [notes, setNotes] = useState<NotesType[]>(initialNotes);
   const hasFetched = useRef(false);
 
   const fetchNotes = async () => {
