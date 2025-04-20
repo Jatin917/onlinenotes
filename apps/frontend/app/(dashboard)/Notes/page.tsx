@@ -10,9 +10,9 @@ const Page = async () => {
   console.log("notes is ", notes);
 
   return (
-    <div>
+    < >
       <NotesCards initialNotes={notes} />
-    </div>
+    </>
   );
 };
 
