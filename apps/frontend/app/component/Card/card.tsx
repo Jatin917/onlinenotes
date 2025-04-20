@@ -27,7 +27,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
   const isDarkMode = useRecoilValue(themeAtom);
   const [isUpvoted, setIsUpvoted] = useState(false);
   const [upvoteCount, setUpvoteCount] = useState(0);
-  
+  console.log('Dark mode on pdfcard', isDarkMode==='dark')
   // Handle upvote with local state
   const handleUpvote = () => {
     setIsUpvoted(!isUpvoted);
@@ -45,7 +45,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
         "w-full max-w-4xl",
         "transition-all duration-300 ease-in-out",
         "shadow-lg hover:shadow-xl",
-        isDarkMode 
+        isDarkMode==='dark' 
           ? "bg-gradient-to-br from-gray-900 to-gray-800 text-white border border-gray-700" 
           : "bg-gradient-to-br from-white to-gray-50 text-gray-800 border border-gray-200"
       )}
@@ -60,7 +60,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
               "w-40 h-52 object-cover rounded-xl",
               "shadow-md hover:shadow-lg",
               "transition-all duration-300",
-              isDarkMode 
+              isDarkMode==='dark' 
                 ? "border border-gray-600" 
                 : "border border-gray-300"
             )}
@@ -70,7 +70,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
               "absolute bottom-0 right-0",
               "text-white px-3 py-1 rounded-tr-xl rounded-bl-xl",
               "text-xs font-semibold tracking-wider",
-              isDarkMode ? "bg-blue-800" : "bg-blue-600"
+              isDarkMode==='dark' ? "bg-blue-800" : "bg-blue-600"
             )}
           >
             PDF
@@ -82,7 +82,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
             className={cn(
               "font-bold text-2xl mb-2 line-clamp-2",
               "transition-colors duration-300",
-              isDarkMode ? "text-gray-100 group-hover:text-blue-300" : "text-gray-800 group-hover:text-blue-600"
+              isDarkMode==='dark' ? "text-gray-100 group-hover:text-blue-300" : "text-gray-800 group-hover:text-blue-600"
             )}
           >
             {title}
@@ -90,7 +90,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
           <p 
             className={cn(
               "text-sm font-medium mb-2",
-              isDarkMode ? "text-gray-400" : "text-gray-600"
+              isDarkMode==='dark' ? "text-gray-400" : "text-gray-600"
             )}
           >
             Owner: {owner}
@@ -104,7 +104,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
                 className={cn(
                   "px-3 py-1 rounded-full text-xs",
                   "transition-colors duration-300",
-                  isDarkMode 
+                  isDarkMode==='dark' 
                     ? "bg-gray-800 text-gray-300 hover:bg-gray-700" 
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 )}
@@ -123,7 +123,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
             icon: Download, 
             label: 'Download', 
             onClick: onDownload,
-            colors: isDarkMode 
+            colors: isDarkMode==='dark' 
               ? "bg-blue-700 text-white hover:bg-blue-600" 
               : "bg-blue-600 text-white hover:bg-blue-500"
           },
@@ -131,7 +131,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
             icon: FileText, 
             label: 'View Notes', 
             onClick: onViewNotes,
-            colors: isDarkMode 
+            colors: isDarkMode==='dark' 
               ? "bg-purple-700 text-white hover:bg-purple-600" 
               : "bg-purple-600 text-white hover:bg-purple-500"
           },
@@ -140,10 +140,10 @@ const PDFCard: React.FC<PDFCardProps> = ({
             label: 'Upvote', 
             onClick: handleUpvote,
             colors: isUpvoted
-              ? isDarkMode
+              ? isDarkMode==='dark'
                 ? "bg-green-600 text-white" 
                 : "bg-green-500 text-white"
-              : isDarkMode
+              : isDarkMode==='dark'
                 ? "bg-gray-700 text-white hover:bg-green-700" 
                 : "bg-gray-200 text-gray-700 hover:bg-green-500 hover:text-white"
           }
