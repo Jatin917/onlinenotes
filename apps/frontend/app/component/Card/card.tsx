@@ -11,24 +11,35 @@ interface PDFCardProps {
   title: string;
   owner: string;
   imageUrl: StaticImageData | string;
-  onDownload: () => void;
   onUpvote: () => void;
-  onViewNotes:()=>void;
+  docLink:string
 }
 
 const PDFCard: React.FC<PDFCardProps> = ({
   title,
   owner,
   imageUrl,
-  onDownload,
   onUpvote,
-  onViewNotes,
+  docLink
 }) => {
   const isDarkMode = useRecoilValue(themeAtom);
   const [isUpvoted, setIsUpvoted] = useState(false);
   const [upvoteCount, setUpvoteCount] = useState(0);
-  console.log('Dark mode on pdfcard', isDarkMode==='dark')
   // Handle upvote with local state
+
+  const onViewNotes = () =>{
+    window.open(docLink, "_blank");
+  }
+
+  const onDownload = () => {
+    const link = document.createElement('a');
+    link.href = docLink;
+    link.download = title;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   const handleUpvote = () => {
     setIsUpvoted(!isUpvoted);
     setUpvoteCount(prev => isUpvoted ? prev - 1 : prev + 1);

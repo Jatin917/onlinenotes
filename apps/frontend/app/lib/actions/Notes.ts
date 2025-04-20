@@ -71,12 +71,13 @@ export const addNotes = async (formData:FormData) =>{
         if (!sessionToken) {
           throw new Error('Session token not found')
         }
+        console.log("file data in frontend ", formData);
         const response = await axios.post(
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/files/addnotes`,
             formData, // or your payload
             {
               headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data',
                 Cookie: `next-auth.session-token=${sessionToken.value}`,
               },
               withCredentials: true,

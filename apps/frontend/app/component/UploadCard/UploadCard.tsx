@@ -37,6 +37,10 @@ const UploadCard = ({ setFiles, files }) => {
     formData.append("subject", subject);    
     const response = await addNotes(formData);
     setIsUploading(false)
+    setFileType("notes")
+    setTitle("")
+    setYear("")
+    setSubject("")
     console.log(response);
   };
 

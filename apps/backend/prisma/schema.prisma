@@ -22,14 +22,15 @@ model Users {
 }
 
 model Note {
-  id           String  @id @default(uuid())
-  title        String
-  subject      String
-  year         String
-  uploadedBy   Users   @relation(fields: [uploadedById], references: [id])
-  uploadedById String
-  fileUrl      String
-  createdAt    DateTime @default(now())
+  id               String  @id @default(uuid())
+  title            String
+  subject          String
+  year             String
+  uploadedBy       Users   @relation(fields: [uploadedById], references: [id])
+  uploadedById     String
+  fileUrl          String
+  downloadableLink String?
+  createdAt        DateTime @default(now())
 }
 
 model PYP {
@@ -40,6 +41,7 @@ model PYP {
   uploadedBy  Users   @relation(fields: [uploadedById], references: [id])
   uploadedById String
   fileUrl     String
+  downloadableLink String?
   solutions   Solution[]
   // upvotes     Int     @default(0)
   createdAt   DateTime @default(now())
@@ -54,6 +56,7 @@ model Solution {
   pyp         PYP    @relation(fields: [pypId], references: [id])
   pypId       String
   fileUrl     String
+  downloadableLink String?
   createdAt   DateTime @default(now())
 }
 

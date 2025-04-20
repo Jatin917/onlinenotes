@@ -48,13 +48,12 @@ const NotesCards = ({initialNotes}: {initialNotes:NotesType[]} ) => {
           >
             <PDFCard
               title={note.title}
+              docLink={note.fileUrl}
               owner="Nan"
               imageUrl={Document.src}
-              onDownload={() => {}}
               onUpvote={() => {}}
               upvoteCount={note.upvotes || 0}
               isUpvoted={note.isUpvoted || false}
-              onViewNotes={() => {}}
             />
           </div>
         ))

@@ -43,8 +43,7 @@ export const addNotes = async (req, res) => {
         if (!title || !subject || !year || !uploadedById) {
             return res.status(400).json({ message: "All Fields Required" });
         }
-
-        if (!req.body.file) {
+        if (!req.file) {
             return res.status(400).json({ message: "No file uploaded" });
         }
 
@@ -59,14 +58,16 @@ export const addNotes = async (req, res) => {
             return res.status(200).json({ message: "File with this name already exists!" });
         }
         // If file does not exist, upload it
+        // console.log("file is ", req.file);
         const { data, error } = await supabase.storage
             .from('notesonline')
-            .upload(fileName, req.body.file.buffer, { contentType: req.body.file.mimetype });
+            .upload(fileName, req.file.buffer, { contentType: req.file.mimetype });
 
         if (error) throw error;
 
         // Get the public URL of the uploaded file
         const uploadedFile = supabase.storage.from('notesonline').getPublicUrl(fileName);
+        // const downloadableLink = supabase.storage.from('notesonline').getDownloadUrl(fileName);
 
         console.log("Uploaded file URL:", uploadedFile.data.publicUrl);
 
