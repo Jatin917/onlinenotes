@@ -1,5 +1,5 @@
 import admin from '../services/firebaseConfig'
-import jwt from 'jsonwebtoken'
+// import jwt from 'jsonwebtoken'
 import { JWT_SECRET, prisma } from '../server.js';
 import { HTTP_STATUS } from '../lib/HTTPCODES.js';
 import { OAuth2Client } from "google-auth-library";
@@ -8,7 +8,8 @@ import { decode } from 'next-auth/jwt';
 
 export const authMiddleware = async (req, res, next) =>{
     try {
-      const token = req.cookies['next-auth.session-token'];  
+      const token = req.cookies['next-auth.session-token']; 
+      console.log("token in authmiddleware ", token) 
       // const token = req.headers.authorization.split(" ")[1];
         if (!token) {
             return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: "Unauthorized: No token provided" });

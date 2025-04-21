@@ -44,9 +44,9 @@ const PDFCard: React.FC<PDFCardProps> = ({
   const handleUpvote = () => {
     try {
     const response = axios.post(`/api/upvote/${id}`, {withCredentials: true});
-      console.log("response of upvote is ", response)
+      // console.log("response of upvote is ", response)
     } catch (error) {
-      console.log("error for upvote is ", error)
+      // console.log("error for upvote is ", error)
     }
     setIsUpvoted(!isUpvoted);
     setUpvoteCount(prev => isUpvoted ? prev - 1 : prev + 1);
