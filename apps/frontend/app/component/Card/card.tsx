@@ -7,7 +7,6 @@ import { useState } from 'react'
 import { cn } from '../../lib/utils';
 import { StaticImageData } from "next/image";
 import axios from "axios";
-import { getServerSession } from "next-auth";
 
 interface PDFCardProps {
   title: string;
@@ -15,6 +14,8 @@ interface PDFCardProps {
   imageUrl: StaticImageData | string;
   docLink:string;
   id:string
+  upvoteCount:number
+  upvotedBy:object[];
 }
 
 const PDFCard: React.FC<PDFCardProps> = ({
@@ -22,11 +23,13 @@ const PDFCard: React.FC<PDFCardProps> = ({
   title,
   owner,
   imageUrl,
-  docLink
+  docLink,
+  upvoteCount,
+  upvotedBy,
 }) => {
   const isDarkMode = useRecoilValue(themeAtom);
   const [isUpvoted, setIsUpvoted] = useState(false);
-  const [upvoteCount, setUpvoteCount] = useState(0);
+  // const [upvoteCount, setUpvoteCount] = useState(0);
   // Handle upvote with local state
 
   const onViewNotes = () =>{
@@ -49,7 +52,7 @@ const PDFCard: React.FC<PDFCardProps> = ({
       // console.log("error for upvote is ", error)
     }
     setIsUpvoted(!isUpvoted);
-    setUpvoteCount(prev => isUpvoted ? prev - 1 : prev + 1);
+    // setUpvoteCount(prev => isUpvoted ? prev - 1 : prev + 1);
   };
 
   return (

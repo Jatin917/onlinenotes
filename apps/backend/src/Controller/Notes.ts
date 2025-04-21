@@ -7,10 +7,28 @@ export const getAllNotes = async (req: any, res: { status: (arg0: number) => { (
         const page = req.query.page || 0;
         // skip-> itne numbers of records ko skip krna hain and take-> return this much of records
         const notes = await prisma.note.findMany({skip:page*10, take:10});
-        if(!notes){
+        const updatedNotes = await Promise.all(
+            notes.map(async (note) => {
+              const id = note.id;
+              const response = await prisma.upvote.findMany({
+                where: { entityId: String(id) }
+              });
+              console.log("upvoted function ", response, id)
+              const upvotedBy = response.map((res) => ({
+                userId: res.userId
+              }));              
+              return {
+                ...note,
+                upvotedBy: upvotedBy,
+                // upvotedCount: response.length,
+              };
+            })
+        )
+        
+        if(!updatedNotes){
             return res.status(HTTP_STATUS.NO_CONTENT).json({message:"No Notes Available"});
         }
-        return res.status(HTTP_STATUS.OK).json({message:"Founded", data:notes});
+        return res.status(HTTP_STATUS.OK).json({message:"Founded", data:updatedNotes});
     } catch (error) {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({message:(error as Error).message});
     }

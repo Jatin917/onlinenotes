@@ -48,12 +48,12 @@ const NotesCards = ({initialNotes}: {initialNotes:NotesType[]} ) => {
           >
             <PDFCard
               id={note.id}
+              upvoteCount={note.upvotedBy.length}
+              upvotedBy={note.upvotedBy}
               title={note.title}
               docLink={note.fileUrl}
               owner="Nan"
               imageUrl={Document.src}
-              upvoteCount={note.upvotes || 0}
-              isUpvoted={note.isUpvoted || false}
             />
           </div>
         ))
