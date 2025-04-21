@@ -16,6 +16,18 @@ export const AUTH_OPTIONS = {
     encryption: false,
     secret: process.env.NEXTAUTH_SECRET,
   },
+
+cookies: {
+  sessionToken: {
+    name: `next-auth.session-token`,
+    options: {
+      httpOnly: true,
+      sameSite: 'None',
+      domain:"localhost",
+      secure: true,
+    },
+  },
+},
   callbacks: {
     async jwt({ token, account }) {
       console.log("jwt callback ", account)

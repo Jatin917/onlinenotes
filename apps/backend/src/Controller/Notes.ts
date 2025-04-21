@@ -88,8 +88,10 @@ export const addNotes = async (req, res) => {
 
 export const upvoteNote = async (req, res) =>{
     try {
+        console.log("in upvote notes")
         const notesId = req.params.notesId;
         const userId = req.body.userId;
+        console.log("notesid ", notesId, userId)
         const response = await prisma.upvote.create({data:{userId, entityId:notesId, entityType:"Notes"}});
         if(!response){
             return res.status(HTTP_STATUS.NOT_MODIFIED).json({message:"not Upvotted"});

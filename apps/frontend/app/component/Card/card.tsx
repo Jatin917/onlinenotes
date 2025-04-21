@@ -6,20 +6,22 @@ import { themeAtom } from "../../store/themeAtom";
 import { useState } from 'react'
 import { cn } from '../../lib/utils';
 import { StaticImageData } from "next/image";
+import axios from "axios";
+import { getServerSession } from "next-auth";
 
 interface PDFCardProps {
   title: string;
   owner: string;
   imageUrl: StaticImageData | string;
-  onUpvote: () => void;
-  docLink:string
+  docLink:string;
+  id:string
 }
 
 const PDFCard: React.FC<PDFCardProps> = ({
+  id,
   title,
   owner,
   imageUrl,
-  onUpvote,
   docLink
 }) => {
   const isDarkMode = useRecoilValue(themeAtom);
@@ -39,11 +41,15 @@ const PDFCard: React.FC<PDFCardProps> = ({
     link.click();
     document.body.removeChild(link);
   }
-
   const handleUpvote = () => {
+    try {
+    const response = axios.post(`/api/upvote/${id}`, {withCredentials: true});
+      console.log("response of upvote is ", response)
+    } catch (error) {
+      console.log("error for upvote is ", error)
+    }
     setIsUpvoted(!isUpvoted);
     setUpvoteCount(prev => isUpvoted ? prev - 1 : prev + 1);
-    onUpvote();
   };
 
   return (
