@@ -30,26 +30,22 @@ export const AUTH_OPTIONS = {
 // },
   callbacks: {
     async jwt({ token, account }) {
-      console.log("jwt callback 🔥");
-      console.log("ACCOUNT: ", JSON.stringify(account, null, 2)); 
-      console.log("TOKEN BEFORE:", JSON.stringify(token, null, 2)); 
     
       if (account) {
         token.idToken = account.id_token ?? "NO_ID_TOKEN_FOUND";
+        token.userId = account.userId
       }
     
-      console.log("TOKEN AFTER:", JSON.stringify(token, null, 2)); 
     
       return token;
     },    
     async session({ session, token }) {
-      console.log("session is called ", token, session)
       // if(!token) return null;
       session.idToken = token.idToken; // Pass it to session
+      session.userId = token.userId
       return session;
     },
     async signIn({ account, profile }) {
-      console.log("signin is called ", account, profile)
       if (!account || !profile) return false;
     
       try {
@@ -64,10 +60,10 @@ export const AUTH_OPTIONS = {
             }
           }
         );
-        console.log("sign in ", res)
         // Check the response from the backend
         if (res.status === 200 && res.data) {
           const userDetails = res.data; 
+          account.userId = res.data.result.id;
           // Return the user data and continue the session creation
           return {
             status: "success",

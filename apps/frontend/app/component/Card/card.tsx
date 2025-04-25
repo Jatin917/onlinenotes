@@ -1,12 +1,15 @@
 "use client"
 
 import { Download, FileText, ThumbsUp } from "lucide-react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { themeAtom } from "../../store/themeAtom";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { cn } from '../../lib/utils';
 import { StaticImageData } from "next/image";
 import axios from "axios";
+import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
+import { upvoteAtom } from "../../store/pageAtom";
 
 interface PDFCardProps {
   title: string;
@@ -27,11 +30,18 @@ const PDFCard: React.FC<PDFCardProps> = ({
   upvoteCount,
   upvotedBy,
 }) => {
+  const session = useSession();
   const isDarkMode = useRecoilValue(themeAtom);
-  const [isUpvoted, setIsUpvoted] = useState(false);
+  const [isUpvoted, setIsUpvoted] = useRecoilState(upvoteAtom);
   // const [upvoteCount, setUpvoteCount] = useState(0);
   // Handle upvote with local state
-
+  useEffect(()=>{
+    upvotedBy.forEach(user=>{
+      if(session && session.data && session.data.userId===user.userId){
+        setIsUpvoted(true);
+      }
+    })
+  },[session, upvotedBy])
   const onViewNotes = () =>{
     window.open(docLink, "_blank");
   }
@@ -44,9 +54,9 @@ const PDFCard: React.FC<PDFCardProps> = ({
     link.click();
     document.body.removeChild(link);
   }
-  const handleUpvote = () => {
+  const handleUpvote = async() => {
     try {
-    const response = axios.post(`/api/upvote/${id}`, {withCredentials: true});
+    await axios.post(`/api/vote/${id}`, {isUpvoted});
       // console.log("response of upvote is ", response)
     } catch (error) {
       // console.log("error for upvote is ", error)
