@@ -17,31 +17,39 @@ export const AUTH_OPTIONS = {
     secret: process.env.NEXTAUTH_SECRET,
   },
 
-cookies: {
-  sessionToken: {
-    name: `next-auth.session-token`,
-    options: {
-      httpOnly: true,
-      sameSite: 'None',
-      domain:"localhost",
-      secure: true,
-    },
-  },
-},
+// cookies: {
+//   sessionToken: {
+//     name: `next-auth.session-token`,
+//     options: {
+//       httpOnly: true,
+//       sameSite: 'None',
+//       // domain:"localhost",
+//       // secure: true,
+//     },
+//   },
+// },
   callbacks: {
     async jwt({ token, account }) {
-      console.log("jwt callback ", account)
-      // abhi ke liye mujhe google id ka use nhi lg rha hain backend main ... we will use it in future
-      // if (account) {
-      //   token.idToken = account.id_token; // Store the Google ID Token
-      // }
+      console.log("jwt callback 🔥");
+      console.log("ACCOUNT: ", JSON.stringify(account, null, 2)); 
+      console.log("TOKEN BEFORE:", JSON.stringify(token, null, 2)); 
+    
+      if (account) {
+        token.idToken = account.id_token ?? "NO_ID_TOKEN_FOUND";
+      }
+    
+      console.log("TOKEN AFTER:", JSON.stringify(token, null, 2)); 
+    
       return token;
-    },
+    },    
     async session({ session, token }) {
+      console.log("session is called ", token, session)
+      // if(!token) return null;
       session.idToken = token.idToken; // Pass it to session
       return session;
     },
     async signIn({ account, profile }) {
+      console.log("signin is called ", account, profile)
       if (!account || !profile) return false;
     
       try {
@@ -56,12 +64,10 @@ cookies: {
             }
           }
         );
-    
+        console.log("sign in ", res)
         // Check the response from the backend
         if (res.status === 200 && res.data) {
-          // User details are available in res.data (make sure backend returns the necessary details)
-          const userDetails = res.data.user; // Example, change based on your response structure
-    
+          const userDetails = res.data; 
           // Return the user data and continue the session creation
           return {
             status: "success",
