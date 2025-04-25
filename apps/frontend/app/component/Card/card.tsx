@@ -17,7 +17,7 @@ interface PDFCardProps {
   imageUrl: StaticImageData | string;
   docLink:string;
   id:string
-  upvoteCount:number
+  initialUpvoteCount:number
   upvotedBy:object[];
 }
 
@@ -27,12 +27,13 @@ const PDFCard: React.FC<PDFCardProps> = ({
   owner,
   imageUrl,
   docLink,
-  upvoteCount,
+  initialUpvoteCount,
   upvotedBy,
 }) => {
   const session = useSession();
   const isDarkMode = useRecoilValue(themeAtom);
-  const [isUpvoted, setIsUpvoted] = useRecoilState(upvoteAtom);
+  const [isUpvoted, setIsUpvoted] = useState(false);
+  const [upvoteCount, setUpvoteCount] = useState(initialUpvoteCount)
   // const [upvoteCount, setUpvoteCount] = useState(0);
   // Handle upvote with local state
   useEffect(()=>{
@@ -56,13 +57,15 @@ const PDFCard: React.FC<PDFCardProps> = ({
   }
   const handleUpvote = async() => {
     try {
-    await axios.post(`/api/vote/${id}`, {isUpvoted});
+    const response = await axios.post(`/api/vote/${id}`, {isUpvoted});
+    if(response.status===200){
+      setIsUpvoted(!isUpvoted);
+      setUpvoteCount(prev => isUpvoted ? prev - 1 : prev + 1);
+    } 
       // console.log("response of upvote is ", response)
     } catch (error) {
       // console.log("error for upvote is ", error)
     }
-    setIsUpvoted(!isUpvoted);
-    // setUpvoteCount(prev => isUpvoted ? prev - 1 : prev + 1);
   };
 
   return (
