@@ -1,6 +1,6 @@
 "use client"
 
-import { Download, FileText, ThumbsUp } from "lucide-react";
+import { Calendar, Download, FileText, HardDrive, ThumbsUp, User } from "lucide-react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { themeAtom } from "../../store/themeAtom";
 import { useEffect, useState } from 'react'
@@ -72,77 +72,107 @@ const PDFCard: React.FC<PDFCardProps> = ({
     <div 
       className={cn(
         "relative group",
-        "flex flex-col md:flex-row",
+        "flex flex-col md:flex-row md:items-stretch",
         "rounded-2xl", 
-        "p-6 space-y-4 md:space-y-0 md:space-x-6",
+        "p-6 gap-6",
         "w-full max-w-4xl",
+        "overflow-hidden",
         "transition-all duration-300 ease-in-out",
         "shadow-lg hover:shadow-xl",
-        isDarkMode==='dark' 
-          ? "bg-gradient-to-br from-gray-900 to-gray-800 text-white border border-gray-700" 
-          : "bg-gradient-to-br from-white to-gray-50 text-gray-800 border border-gray-200"
+        "hover:ring-2 hover:ring-opacity-50",
+        isDarkMode === 'dark' 
+          ? "bg-gray-900 text-white border border-gray-700 hover:ring-blue-500" 
+          : "bg-white text-gray-800 border border-gray-200 hover:ring-blue-400",
+        isUpvoted && (isDarkMode ? "ring-2 ring-green-500" : "ring-2 ring-green-400")
       )}
     >
-      {/* Left Side: PDF Image and Details */}
-      <div className="flex-grow flex flex-col md:flex-row items-center md:space-x-6 w-full">
-        <div className="relative mb-4 md:mb-0 transform transition-transform group-hover:scale-[1.02]">
+      {/* Left Side: Thumbnail and Content */}
+      <div className="flex flex-1 flex-col md:flex-row gap-6 min-w-0 w-full md:pr-4">
+        {/* Thumbnail with shimmer effect */}
+        <div className="relative shrink-0 w-full md:w-48 h-52 overflow-hidden rounded-xl">
           <img
             src={imageUrl || "https://images.unsplash.com/photo-1461749280684-dccba630e2f6"}
             alt={`${title} thumbnail`}
             className={cn(
-              "w-40 h-52 object-cover rounded-xl",
-              "shadow-md hover:shadow-lg",
-              "transition-all duration-300",
-              isDarkMode==='dark' 
+              "w-full h-full object-cover transition-all duration-500 group-hover:scale-105",
+              "absolute inset-0",
+              isDarkMode === 'dark' 
                 ? "border border-gray-600" 
                 : "border border-gray-300"
             )}
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <div 
             className={cn(
-              "absolute bottom-0 right-0",
-              "text-white px-3 py-1 rounded-tr-xl rounded-bl-xl",
-              "text-xs font-semibold tracking-wider",
-              isDarkMode==='dark' ? "bg-blue-800" : "bg-blue-600"
+              "absolute bottom-3 right-3",
+              "px-2.5 py-1 rounded-lg",
+              "text-xs font-bold tracking-wider",
+              "backdrop-blur-sm",
+              isDarkMode === 'dark' 
+                ? "bg-blue-900/80 text-blue-100" 
+                : "bg-blue-600/90 text-white"
             )}
           >
             PDF
           </div>
         </div>
-        
-        <div className="text-center md:text-left w-full md:w-auto">
+  
+        {/* Content */}
+        <div className="flex-1 flex flex-col justify-between min-w-0">
+          {/* Title with underline animation */}
           <h2 
             className={cn(
               "font-bold text-2xl mb-2 line-clamp-2",
-              "transition-colors duration-300",
-              isDarkMode==='dark' ? "text-gray-100 group-hover:text-blue-300" : "text-gray-800 group-hover:text-blue-600"
+              "relative w-fit",
+              "after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current",
+              "after:w-0 after:transition-all after:duration-300 group-hover:after:w-full",
+              isDarkMode === 'dark' 
+                ? "text-gray-100 group-hover:text-blue-300" 
+                : "text-gray-800 group-hover:text-blue-600"
             )}
           >
             {title}
           </h2>
-          <p 
-            className={cn(
-              "text-sm font-medium mb-2",
-              isDarkMode==='dark' ? "text-gray-400" : "text-gray-600"
-            )}
-          >
-            Owner: {owner}
-          </p>
-          
-          {/* Document metadata */}
-          <div className="flex flex-wrap gap-2 mt-2">
-            {['Date Added', 'File Size'].map((label, index) => (
+  
+          {/* Metadata */}
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <span className={cn(
+              "flex items-center gap-1 text-sm",
+              isDarkMode ? "text-gray-400" : "text-gray-600"
+            )}>
+              <User size={14} />
+              {owner}
+            </span>
+            <span className={cn(
+              "flex items-center gap-1 text-sm",
+              isDarkMode ? "text-gray-400" : "text-gray-600"
+            )}>
+              <Calendar size={14} />
+              {new Date().toLocaleDateString()}
+            </span>
+            <span className={cn(
+              "flex items-center gap-1 text-sm",
+              isDarkMode ? "text-gray-400" : "text-gray-600"
+            )}>
+              <HardDrive size={14} />
+              2.4 MB
+            </span>
+          </div>
+  
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mt-auto">
+            {['Mathematics', 'Calculus', 'Formulas'].map(tag => (
               <span 
-                key={label}
+                key={tag}
                 className={cn(
-                  "px-3 py-1 rounded-full text-xs",
+                  "px-3 py-1 rounded-full text-xs font-medium",
                   "transition-colors duration-300",
-                  isDarkMode==='dark' 
+                  isDarkMode === 'dark' 
                     ? "bg-gray-800 text-gray-300 hover:bg-gray-700" 
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 )}
               >
-                {index === 0 ? new Date().toLocaleDateString() : '2.4 MB'}
+                #{tag}
               </span>
             ))}
           </div>
@@ -150,64 +180,75 @@ const PDFCard: React.FC<PDFCardProps> = ({
       </div>
   
       {/* Right Side: Action Buttons */}
-      <div className="flex flex-row md:flex-col justify-center space-x-4 md:space-x-0 md:space-y-4 mt-4 md:mt-0">
+      <div className="flex-shrink-0 flex flex-row md:flex-col gap-3 w-full md:w-auto justify-end md:justify-center mt-4 md:mt-0 md:ml-auto">
         {[
           { 
             icon: Download, 
             label: 'Download', 
             onClick: onDownload,
-            colors: isDarkMode==='dark' 
-              ? "bg-blue-700 text-white hover:bg-blue-600" 
-              : "bg-blue-600 text-white hover:bg-blue-500"
+            colors: isDarkMode === 'dark' 
+              ? "bg-blue-700 hover:bg-blue-600 text-white" 
+              : "bg-blue-600 hover:bg-blue-500 text-white",
+            tooltip: "Download PDF"
           },
           { 
             icon: FileText, 
-            label: 'View Notes', 
+            label: 'View', 
             onClick: onViewNotes,
-            colors: isDarkMode==='dark' 
-              ? "bg-purple-700 text-white hover:bg-purple-600" 
-              : "bg-purple-600 text-white hover:bg-purple-500"
+            colors: isDarkMode === 'dark' 
+              ? "bg-gray-800 hover:bg-gray-700 text-white" 
+              : "bg-gray-200 hover:bg-gray-300 text-gray-800",
+            tooltip: "View Notes"
           },
           { 
             icon: ThumbsUp, 
-            label: 'Upvote', 
+            label: upvoteCount, 
             onClick: handleUpvote,
             colors: isUpvoted
-              ? isDarkMode==='dark'
-                ? "bg-green-600 text-white" 
+              ? isDarkMode === 'dark'
+                ? "bg-green-700 text-white" 
                 : "bg-green-500 text-white"
-              : isDarkMode==='dark'
-                ? "bg-gray-700 text-white hover:bg-green-700" 
-                : "bg-gray-200 text-gray-700 hover:bg-green-500 hover:text-white"
+              : isDarkMode === 'dark'
+                ? "bg-gray-800 text-white hover:bg-green-800" 
+                : "bg-gray-200 text-gray-700 hover:bg-green-500 hover:text-white",
+            tooltip: "Upvote"
           }
-        ].map(({ icon: Icon, label, onClick, colors }) => (
+        ].map(({ icon: Icon, label, onClick, colors, tooltip }) => (
           <button
-            key={label}
+            key={tooltip}
             onClick={onClick}
             className={cn(
-              "p-3 rounded-xl shadow-md hover:shadow-lg",
-              "transition-all duration-300 group",
+              "p-3 rounded-xl",
+              "w-12 h-12 md:w-auto md:h-auto",
+              "transition-all duration-300 group/button",
               "flex items-center justify-center",
-              "transform hover:-translate-y-1",
-              colors
+              "relative overflow-hidden",
+              "shadow-sm hover:shadow-md",
+              "transform hover:-translate-y-0.5",
+              colors,
+              "after:absolute after:inset-0 after:bg-white/10 after:opacity-0",
+              "hover:after:opacity-100 after:transition-opacity"
             )}
-            aria-label={label}
+            aria-label={tooltip}
+            data-tooltip={tooltip}
           >
             <Icon
-              size={22}
-              className="group-hover:scale-110 transition-transform"
+              size={20}
+              className={cn(
+                "transition-transform duration-300",
+                "group-hover/button:scale-110",
+                label === upvoteCount && isUpvoted && "animate-bounce"
+              )}
             />
-            {label !== 'Upvote' && (
-              <span className="ml-2 hidden md:inline">{label}</span>
-            )}
-            {label === 'Upvote' && (
-              <span className="ml-2 hidden md:inline">{upvoteCount}</span>
-            )}
+            <span className="ml-2 hidden md:inline-block text-sm font-medium">
+              {label}
+            </span>
           </button>
         ))}
       </div>
     </div>
   );
+  
 };
 
 export default PDFCard;
