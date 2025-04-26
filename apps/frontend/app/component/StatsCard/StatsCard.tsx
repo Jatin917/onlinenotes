@@ -4,7 +4,7 @@ import { useThemeClasses } from "../../Style/theme";
 import { useRecoilValue } from "recoil";
 import { themeAtom } from "../../store/themeAtom";
 
-const StatsCard = () => {
+const StatsCard = ({notes, papers}) => {
       const {
         cardClass,
         headingClass,
@@ -48,7 +48,7 @@ const StatsCard = () => {
             >
               <p className={`text-sm ${mutedTextClass}`}>Notes</p>
               <p className={`text-2xl font-bold ${headingClass}`}>
-                {files.filter((f) => f.type === "notes").length}
+                {notes.length}
               </p>
             </div>
             <div
@@ -56,7 +56,7 @@ const StatsCard = () => {
             >
               <p className={`text-sm ${mutedTextClass}`}>PYPs</p>
               <p className={`text-2xl font-bold ${headingClass}`}>
-                {files.filter((f) => f.type === "pyp").length}
+                {papers.length}
               </p>
             </div>
             <div
@@ -64,7 +64,7 @@ const StatsCard = () => {
             >
               <p className={`text-sm ${mutedTextClass}`}>Total Files</p>
               <p className={`text-2xl font-bold ${headingClass}`}>
-                {files.length}
+                {notes.length + papers.length}
               </p>
             </div>
             <div
@@ -72,7 +72,7 @@ const StatsCard = () => {
             >
               <p className={`text-sm ${mutedTextClass}`}>Latest Upload</p>
               <p className={`text-sm font-medium ${headingClass}`}>
-                {files[files.length - 1]?.date}
+                {new Date(notes[notes.length-1].createdAt).toLocaleDateString('en-GB')}
               </p>
             </div>
           </div>

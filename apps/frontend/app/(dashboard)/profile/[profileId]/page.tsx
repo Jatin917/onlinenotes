@@ -26,12 +26,12 @@ export default async function ProfilePage({params}) {
             {isSameUser && <UploadCard />}
             
             {/* Stats Card */}
-            <StatsCard />
+            <StatsCard notes={user.notes} papers={user.papers} />
           </div>
           
           {/* Right Column - Documents Section */}
           <div className="md:col-span-2">
-              <DocumentSection />
+              <DocumentSection notes={user.notes} papers={user.papers} isSameUser={isSameUser}/>
           </div>
         </div>
       </div>

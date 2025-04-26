@@ -4,22 +4,32 @@ import React, { useState } from "react";
 import { useThemeClasses } from "../../Style/theme";
 import { useRecoilValue } from "recoil";
 import { themeAtom } from "../../store/themeAtom";
+import axios from "axios";
 
-export const DocumentSection = () => {
+export const DocumentSection = ({notes, papers, isSameUser}) => {
   
-  const [files, setFiles] = useState([
-    { id: 1, name: "Advanced Data Structures Notes.pdf", type: "notes", date: "2025-03-15", size: "2.4 MB" },
-    { id: 2, name: "Machine Learning PYP 2024.pdf", type: "pyp", date: "2025-03-20", size: "1.8 MB" },
-    { id: 3, name: "Neural Networks Lecture Notes.pdf", type: "notes", date: "2025-03-25", size: "3.6 MB" },
-    { id: 4, name: "Computer Vision Midterm 2023.pdf", type: "pyp", date: "2025-03-28", size: "2.1 MB" }
-  ]);
+
+  const handleDeletefile = async(id: string, fileType: string)=>{
+    try {
+      const response=await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/files/${fileType==='notes' ? 'deleteNote' : 'deletePyp'}/${id}`);
+      if(!response){
+          // yha handle krna hain notes nhi mile to like any message through toaster
+          console.log("Failed to delete");
+          throw Error("Failed to delete");
+      }
+      console.log(response.data.message)
+    } catch (error) {
+        console.error(error);
+    }
+  }
+  const [files, setFiles] = useState([...notes, ...papers]);
 
   const [activeTab, setActiveTab] = useState('all');
 
   const filteredFiles = activeTab === 'all' 
     ? files 
-    : files.filter(file => file.type === activeTab);
-
+    : (activeTab==='notes'?notes:papers);
+    console.log("filtered files ", filteredFiles)
     const theme = useRecoilValue(themeAtom);
     const {cardClass, headingClass, inputBgClass, borderClass, activeTabClass, inputTextClass, tabClass, hoverBgClass, mutedTextClass, secondaryBtnClass, iconClass } = useThemeClasses();
   return (
@@ -125,9 +135,9 @@ export const DocumentSection = () => {
                     <div className="min-w-0 flex-1">
                       <h3
                         className={`font-medium truncate ${headingClass}`}
-                        title={file.name}
+                        title={file.title}
                       >
-                        {file.name}
+                        {file.title}
                       </h3>
                       <div className="flex items-center mt-1">
                         <span
@@ -143,19 +153,20 @@ export const DocumentSection = () => {
                           •
                         </span>
                         <span className={`text-xs ${mutedTextClass}`}>
-                          {file.date}
+                        {new Date(file.createdAt).toLocaleDateString('en-GB')}
                         </span>
                         <span className={`mx-2 text-xs ${mutedTextClass}`}>
                           •
                         </span>
-                        <span className={`text-xs ${mutedTextClass}`}>
+                        {/* <span className={`text-xs ${mutedTextClass}`}>
                           {file.size}
-                        </span>
+                        </span> */}
                       </div>
                     </div>
                   </div>
                   <div className="flex space-x-1">
                     <button
+                      onClick={() => window.open(file.fileUrl, '_blank')}
                       className={`p-2 rounded-lg ${secondaryBtnClass} transition-colors duration-200`}
                       title="View"
                     >
@@ -181,6 +192,7 @@ export const DocumentSection = () => {
                       </svg>
                     </button>
                     <button
+                      onClick={() => window.open(file.fileUrl, '_blank')}
                       className={`p-2 rounded-lg ${secondaryBtnClass} transition-colors duration-200`}
                       title="Download"
                     >
@@ -199,7 +211,8 @@ export const DocumentSection = () => {
                         />
                       </svg>
                     </button>
-                    <button
+                    {isSameUser && activeTab!=='all' && <button
+                      onClick={()=>handleDeletefile(file.id, activeTab)}
                       className={`p-2 rounded-lg ${secondaryBtnClass} transition-colors duration-200`}
                       title="Delete"
                     >
@@ -217,7 +230,7 @@ export const DocumentSection = () => {
                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                         />
                       </svg>
-                    </button>
+                    </button>}
                   </div>
                 </div>
               ))}

@@ -58,3 +58,16 @@ export const getPYP = async (req, res) =>{
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({error})
     }
 }
+
+export const deletePyp = async (req, res) =>{
+    try {
+        const id = req.params.id;
+        const response = await prisma.pYP.delete({where:{id}});
+        if(!response){
+            return res.status(HTTP_STATUS.NOT_IMPLEMENTED).json({message:"Failed to Delete"});
+        }
+        return res.status(HTTP_STATUS.OK).json({message:"Deleted"});
+    } catch (error) {
+        console.log(error)
+    }
+}

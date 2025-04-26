@@ -1,8 +1,8 @@
 import express from 'express'
-import { addNotes, downvoteNote, getAllNotes, getNotes, upvoteNote } from '../../Controller/Notes';
+import { addNotes, deleteNote, downvoteNote, getAllNotes, getNotes, upvoteNote } from '../../Controller/Notes';
 import { upload } from '../../Middleware/multer';
 import { authMiddleware } from '../../Middleware/authmiddleware';
-import { addPYP, getPYP, getPYPs } from '../../Controller/PYPs';
+import { addPYP, deletePyp, getPYP, getPYPs } from '../../Controller/PYPs';
 import { addPYPSolution, downvotePYPSolution, getPYPsSolution, upvotePYPSolution } from '../../Controller/Solution';
 
 
@@ -21,3 +21,5 @@ filesRouter.post("/upvoteNote/:notesId", authMiddleware, upvoteNote);
 filesRouter.post("/downvoteNote/:notesId", authMiddleware, downvoteNote);
 filesRouter.post("/upvotesolution/:pypId", authMiddleware, upvotePYPSolution);
 filesRouter.post("/downvotesolution/:pypId", authMiddleware, downvotePYPSolution);
+filesRouter.delete("/deleteNote/:id", authMiddleware, deleteNote);
+filesRouter.delete("/deletePyp/:id", authMiddleware, deletePyp);

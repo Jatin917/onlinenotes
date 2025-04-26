@@ -102,8 +102,6 @@ export const addNotes = async (req, res) => {
     }
 };
 
-
-
 export const upvoteNote = async (req, res) =>{
     try {
         console.log("in upvote notes")
@@ -142,6 +140,17 @@ export const downvoteNote = async (req, res) =>{
 }
 
 
-
+export const deleteNote = async (req, res) =>{
+    try {
+        const id = req.params.id;
+        const response = await prisma.note.delete({where:{id}});
+        if(!response){
+            return res.status(HTTP_STATUS.NOT_IMPLEMENTED).json({message:"Failed to Delete"});
+        }
+        return res.status(HTTP_STATUS.OK).json({message:"Deleted"});
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
