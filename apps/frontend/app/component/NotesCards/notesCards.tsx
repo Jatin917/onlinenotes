@@ -171,9 +171,9 @@ const NotesCards = ({ initialNotes, onCreateNew, onNoteSelect }: NotesCardsProps
                   id={note.id}
                   initialUpvoteCount={note.upvotedBy.length}
                   upvotedBy={note.upvotedBy}
+                  uploaderId={note.uploadedBy}
                   title={note.title}
                   docLink={note.fileUrl}
-                  owner={note.owner?.name || "Anonymous"}
                   imageUrl={note.thumbnailUrl || Document.src}
                   darkMode={isDarkMode}
                 />

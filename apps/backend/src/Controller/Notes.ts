@@ -6,7 +6,7 @@ export const getAllNotes = async (req: any, res: { status: (arg0: number) => { (
     try {
         const page = req.query.page || 0;
         // skip-> itne numbers of records ko skip krna hain and take-> return this much of records
-        const notes = await prisma.note.findMany({skip:page*10, take:10});
+        const notes = await prisma.note.findMany({skip:page*10, take:10, include:{uploadedBy:{select:{id:true, name:true, email:true, profilePicture:true}}}});
         const updatedNotes = await Promise.all(
             notes.map(async (note) => {
               const id = note.id;

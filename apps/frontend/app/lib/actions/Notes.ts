@@ -123,3 +123,18 @@ export const addPyps = async (formData:FormData) =>{
         return [];
     }
 }
+
+export const getUserDetails = async (id:string) =>{
+    try {
+        const response=await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${id}`);
+        if(!response){
+            // yha handle krna hain notes nhi mile to like any message through toaster
+            console.log("No User Founded");
+            throw Error("No User Founded");
+        }
+        return response.data.data;
+    } catch (error) {
+        // console.error(error);
+        return [];
+    }
+}

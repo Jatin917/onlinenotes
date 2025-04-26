@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import { useThemeClasses } from "../../Style/theme";
 import { addNotes } from "../../lib/actions/Notes";
 
-const UploadCard = ({ setFiles, files }) => {
+const UploadCard = () => {
   const {
     cardClass,
     headingClass,

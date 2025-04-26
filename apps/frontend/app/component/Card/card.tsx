@@ -10,25 +10,26 @@ import axios from "axios";
 import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import { upvoteAtom } from "../../store/pageAtom";
+import Link from "next/link";
 
 interface PDFCardProps {
   title: string;
-  owner: string;
   imageUrl: StaticImageData | string;
   docLink:string;
   id:string
   initialUpvoteCount:number
   upvotedBy:object[];
+  uploaderId:object[];
 }
 
 const PDFCard: React.FC<PDFCardProps> = ({
   id,
   title,
-  owner,
   imageUrl,
   docLink,
   initialUpvoteCount,
   upvotedBy,
+  uploaderId
 }) => {
   const session = useSession();
   const isDarkMode = useRecoilValue(themeAtom);
@@ -136,13 +137,13 @@ const PDFCard: React.FC<PDFCardProps> = ({
   
           {/* Metadata */}
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className={cn(
+            <Link href={`/profile/${uploaderId.id}`}  className={cn(
               "flex items-center gap-1 text-sm",
               isDarkMode ? "text-gray-400" : "text-gray-600"
             )}>
               <User size={14} />
-              {owner}
-            </span>
+              {uploaderId.name || 'Anonymous'}
+            </Link>
             <span className={cn(
               "flex items-center gap-1 text-sm",
               isDarkMode ? "text-gray-400" : "text-gray-600"

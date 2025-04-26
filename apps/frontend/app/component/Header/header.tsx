@@ -3,13 +3,18 @@ import { useState, useEffect } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRecoilState } from 'recoil';
 import { themeAtom } from '../../store/themeAtom';
-import { Menu, X, Search, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useRouter } from 'next/navigation';
+import MobileMenu from '../../UI/mobileMenu';
+import SearchBar from '../../UI/searchBar';
+import ThemeToggle from '../../UI/toggleDark';
+import { NavigationToggle } from '../../UI/navigationToggle';
+import {FilterDropdown} from '../../UI/filterDropDown';
+import { Menu, X } from 'lucide-react';
 
 const Logo = () => {
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1 group cursor-pointer">
       <div className="w-8 h-8 flex flex-col">
         <div className="w-4 h-4 bg-blue-600 rounded-sm transition-all duration-300 group-hover:rotate-12"></div>
         <div className="w-4 h-4 bg-indigo-700 rounded-sm ml-4 -mt-1 transition-all duration-300 group-hover:-rotate-12"></div>
@@ -39,7 +44,7 @@ const SignInButton = ({ theme }) => {
   );
 };
 
-const SignOutButton = ({ theme, data }) => {
+const UserDropdown = ({ theme, data }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   if (!data?.user) return null;
@@ -58,7 +63,6 @@ const SignOutButton = ({ theme, data }) => {
             borderColor: theme === "dark" ? "#374151" : "#e5e7eb"
           }}
         />
-        {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
       </div>
       
       {isOpen && (
@@ -66,12 +70,17 @@ const SignOutButton = ({ theme, data }) => {
           className={cn(
             "absolute right-0 mt-2 w-48 rounded-lg shadow-lg overflow-hidden z-50",
             "transition-all duration-200 origin-top-right",
-            theme === "dark" ? "bg-gray-800" : "bg-white"
+            theme === "dark" 
+              ? "bg-gray-800 border border-gray-700" 
+              : "bg-white border border-gray-200"
           )}
         >
-          <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+          <div className={cn(
+            "p-3 border-b",
+            theme === "dark" ? "border-gray-700" : "border-gray-200"
+          )}>
             <p className="text-sm font-medium truncate">{data.user.name}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+            <p className="text-xs truncate mt-1">
               {data.user.email}
             </p>
           </div>
@@ -91,12 +100,13 @@ const SignOutButton = ({ theme, data }) => {
   );
 };
 
-
 const Header = () => {
   const { data, status } = useSession();
   const [theme, setTheme] = useRecoilState(themeAtom);
   const [isMobile, setIsMobile] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedSubject, setSelectedSubject] = useState(null);
   
   const router = useRouter();
   const navItems = ["NOTES", "PYPs", "Profile"];
@@ -110,6 +120,19 @@ const Header = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const handleYearChange = (year) => {
+    setSelectedYear(year);
+    setSelectedSubject(null);
+  };
+
+  const handleSubjectChange = (subject) => {
+    setSelectedSubject(subject);
+  };
+
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+  };
+
   return (
     <header
       className={cn(
@@ -122,48 +145,40 @@ const Header = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Left side - Logo and Desktop Nav */}
         <div className="flex items-center gap-6">
-          <div className="group cursor-pointer">
+          <div onClick={() => router.push('/')}>
             <Logo />
           </div>
           
           <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <button
-                onClick={()=>router.push(`/${item.toLowerCase()}`)}
-                key={item}
-                className={cn(
-                  "px-4 py-2 rounded-md text-sm font-medium transition-colors",
-                  theme === "dark"
-                    ? "hover:bg-gray-800"
-                    : "hover:bg-gray-100"
-                )}
-              >
-                {item}
-              </button>
-            ))}
+            <NavigationToggle 
+              theme={theme}
+              options={navItems}
+              activeIndex={0}
+              onChange={(option, index) => router.push(`/${option.toLowerCase()}`)}
+            />
           </nav>
         </div>
 
         {/* Middle - Search and Filters (Desktop) */}
-        <div className="hidden md:flex items-center flex-1 max-w-xl mx-6">
-          <div className="relative w-full">
-            <Search 
-              size={18} 
-              className={cn(
-                "absolute left-3 top-1/2 -translate-y-1/2",
-                theme === "dark" ? "text-gray-400" : "text-gray-500"
-              )} 
+        <div className="hidden md:flex items-center flex-1 max-w-2xl mx-6 gap-4">
+          <div className="flex-1">
+            <SearchBar theme={theme} />
+          </div>
+          <div className="flex gap-2">
+            <FilterDropdown
+              theme={theme}
+              placeholder="Year"
+              options={years}
+              value={selectedYear}
+              onChange={handleYearChange}
             />
-            <input
-              type="text"
-              placeholder="Search notes..."
-              className={cn(
-                "w-full pl-10 pr-4 py-2 rounded-full text-sm",
-                "focus:outline-none focus:ring-2",
-                theme === "dark"
-                  ? "bg-gray-800 placeholder-gray-400 focus:ring-blue-500"
-                  : "bg-gray-100 placeholder-gray-500 focus:ring-blue-400"
-              )}
+            <FilterDropdown
+              theme={theme}
+              placeholder="Subject"
+              options={subjects}
+              value={selectedSubject}
+              onChange={handleSubjectChange}
+              disabled={!selectedYear}
             />
           </div>
         </div>
@@ -171,34 +186,26 @@ const Header = () => {
         {/* Right side - Actions */}
         <div className="flex items-center gap-3">
           {/* Theme Toggle */}
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className={cn(
-              "p-2 rounded-full transition-colors",
-              theme === "dark" 
-                ? "hover:bg-gray-800 text-yellow-300" 
-                : "hover:bg-gray-100 text-gray-700"
-            )}
-          >
-            {theme === "dark" ? (
-              <span className="text-lg">☀️</span>
-            ) : (
-              <span className="text-lg">🌙</span>
-            )}
-          </button>
+          <ThemeToggle 
+            initialTheme={theme} 
+            onChange={handleThemeChange} 
+          />
 
           {/* Auth */}
           <div className="hidden md:block">
             {status !== "authenticated" ? (
               <SignInButton theme={theme} />
             ) : (
-              <SignOutButton theme={theme} data={data} />
+              <UserDropdown theme={theme} data={data} />
             )}
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 rounded-md"
+            className={cn(
+              "md:hidden p-2 rounded-md",
+              theme === "dark" ? "hover:bg-gray-800" : "hover:bg-gray-100"
+            )}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? (
@@ -212,60 +219,16 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className={cn(
-          "md:hidden mt-3 pt-3 border-t",
-          theme === "dark" ? "border-gray-800" : "border-gray-200"
-        )}>
-          <div className="flex flex-col gap-3">
-            <div className="px-2">
-              <input
-                type="text"
-                placeholder="Search notes..."
-                className={cn(
-                  "w-full px-4 py-2 rounded-full text-sm",
-                  "focus:outline-none focus:ring-2",
-                  theme === "dark"
-                    ? "bg-gray-800 placeholder-gray-400 focus:ring-blue-500"
-                    : "bg-gray-100 placeholder-gray-500 focus:ring-blue-400"
-                )}
-              />
-            </div>
-            
-            <nav className="flex flex-col gap-1">
-              {navItems.map((item) => (
-                <button
-                  key={item}
-                  className={cn(
-                    "px-4 py-3 rounded-md text-left font-medium",
-                    theme === "dark"
-                      ? "hover:bg-gray-800"
-                      : "hover:bg-gray-100"
-                  )}
-                >
-                  {item}
-                </button>
-              ))}
-            </nav>
-
-            <div className="px-2 py-2">
-              {status !== "authenticated" ? (
-                <SignInButton theme={theme} />
-              ) : (
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">
-                    {data?.user?.name || "Account"}
-                  </span>
-                  <button
-                    onClick={() => signOut()}
-                    className="text-sm text-blue-500 hover:underline"
-                  >
-                    Sign out
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        <MobileMenu
+          theme={theme}
+          years={years}
+          subjects={subjects}
+          selectedYear={selectedYear}
+          selectedSubject={selectedSubject}
+          onYearChange={handleYearChange}
+          onSubjectChange={handleSubjectChange}
+          onThemeChange={handleThemeChange}
+        />
       )}
     </header>
   );

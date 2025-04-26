@@ -42,7 +42,7 @@ export const AUTH_OPTIONS = {
     async session({ session, token }) {
       // if(!token) return null;
       session.idToken = token.idToken; // Pass it to session
-      session.userId = token.userId
+      session.user.userId = token.userId as string
       return session;
     },
     async signIn({ account, profile }) {

@@ -1,21 +1,26 @@
+"use client"
+
 import Image from "next/image";
 import React from "react";
 import { useThemeClasses } from "../../Style/theme";
+import { useSession } from "next-auth/react";
 
-const ProfileHeader = ({ user }) => {
+const ProfileHeader = ({ user, isSameUser }) => {
   const {
     cardClass,
     headingClass,
     textClass,
     primaryBtnClass,
+    
   } = useThemeClasses();
+  console.log("profile header ", user);
   return (
 <div className={`${cardClass} rounded-xl mb-8 overflow-hidden transition-colors duration-300`}>
       <div className="px-6 py-8 relative">
         <div className="flex flex-col md:flex-row items-center">
           <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
             <Image
-              src={user?.image}
+              src={user?.profilePicture || user?.image}
               alt="Profile Picture"
               layout="fill"
               className="object-cover"
@@ -35,7 +40,7 @@ const ProfileHeader = ({ user }) => {
                 )}
               </div>
                 
-              <button
+              {isSameUser && <button
                 className={`mt-4 md:mt-0 px-4 py-2 rounded-lg ${primaryBtnClass} transition-colors duration-200 flex items-center space-x-2`}
               >
                 <svg
@@ -53,7 +58,7 @@ const ProfileHeader = ({ user }) => {
                   />
                 </svg>
                 <span>Edit Profile</span>
-              </button>
+              </button>}
             </div>
           </div>
         </div>

@@ -1,9 +1,25 @@
-import React from "react";
+"use client"
+
+import React, { useState } from "react";
 import { useThemeClasses } from "../../Style/theme";
 import { useRecoilValue } from "recoil";
 import { themeAtom } from "../../store/themeAtom";
 
-export const DocumentSection = ({setActiveTab, activeTab, filteredFiles}) => {
+export const DocumentSection = () => {
+  
+  const [files, setFiles] = useState([
+    { id: 1, name: "Advanced Data Structures Notes.pdf", type: "notes", date: "2025-03-15", size: "2.4 MB" },
+    { id: 2, name: "Machine Learning PYP 2024.pdf", type: "pyp", date: "2025-03-20", size: "1.8 MB" },
+    { id: 3, name: "Neural Networks Lecture Notes.pdf", type: "notes", date: "2025-03-25", size: "3.6 MB" },
+    { id: 4, name: "Computer Vision Midterm 2023.pdf", type: "pyp", date: "2025-03-28", size: "2.1 MB" }
+  ]);
+
+  const [activeTab, setActiveTab] = useState('all');
+
+  const filteredFiles = activeTab === 'all' 
+    ? files 
+    : files.filter(file => file.type === activeTab);
+
     const theme = useRecoilValue(themeAtom);
     const {cardClass, headingClass, inputBgClass, borderClass, activeTabClass, inputTextClass, tabClass, hoverBgClass, mutedTextClass, secondaryBtnClass, iconClass } = useThemeClasses();
   return (

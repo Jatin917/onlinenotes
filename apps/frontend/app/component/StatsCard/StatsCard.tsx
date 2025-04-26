@@ -1,14 +1,21 @@
-import React from "react";
+"use client"
+import React, { useState } from "react";
 import { useThemeClasses } from "../../Style/theme";
 import { useRecoilValue } from "recoil";
 import { themeAtom } from "../../store/themeAtom";
 
-const StatsCard = ({files}) => {
+const StatsCard = () => {
       const {
         cardClass,
         headingClass,
         mutedTextClass,
       } = useThemeClasses();
+        const [files, setFiles] = useState([
+          { id: 1, name: "Advanced Data Structures Notes.pdf", type: "notes", date: "2025-03-15", size: "2.4 MB" },
+          { id: 2, name: "Machine Learning PYP 2024.pdf", type: "pyp", date: "2025-03-20", size: "1.8 MB" },
+          { id: 3, name: "Neural Networks Lecture Notes.pdf", type: "notes", date: "2025-03-25", size: "3.6 MB" },
+          { id: 4, name: "Computer Vision Midterm 2023.pdf", type: "pyp", date: "2025-03-28", size: "2.1 MB" }
+        ]);
     //   theme for now import kr rhe hain but you have to make theme class for every color in ui
     const theme = useRecoilValue(themeAtom)
   return (
